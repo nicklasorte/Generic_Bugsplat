@@ -136,11 +136,12 @@ if ~isempty(zero_idx)==1
                         clear temp_data;
                         % % %      %%%%array_list_bs  %%%%%%%1) Lat, 2)Lon, 3)BS height, 4)BS EIRP 5) Nick Unique ID for each sector, 6)NLCD: R==1/S==2/U==3, 7) Azimuth 8)BS EIRP Mitigation
 
-                        load(strcat(data_label1,'_radar_height.mat'),'radar_height')
-                        temp_data=radar_height;
-                        clear radar_height;
-                        radar_height=temp_data;
-                        clear temp_data;
+                        %%%%%%%%%%%%%%Already incorporated into the base_protection_pts
+% % % % %                         load(strcat(data_label1,'_radar_height.mat'),'radar_height')
+% % % % %                         temp_data=radar_height;
+% % % % %                         clear radar_height;
+% % % % %                         radar_height=temp_data;
+% % % % %                         clear temp_data;
 
                         load(strcat(data_label1,'_radar_threshold.mat'),'radar_threshold')
                         temp_data=radar_threshold;
@@ -474,14 +475,14 @@ if ~isempty(zero_idx)==1
 
                                 %%%%%%%%Find the max distance as a check
                                 temp_grid_pts=sim_array_list_bs(idx_keep,[1,2]);
-                                [idx_knn]=knnsearch(base_protection_pts,temp_grid_pts,'k',1); %%%Find Nearest Neighbor
-                                base_knn_array=base_protection_pts(idx_knn,:);
+                                [idx_knn]=knnsearch(base_protection_pts(:,[1:2]),temp_grid_pts,'k',1); %%%Find Nearest Neighbor
+                                base_knn_array=base_protection_pts(idx_knn,[1:2]);
                                 knn_dist_bound=deg2km(distance(base_knn_array(:,1),base_knn_array(:,2),temp_grid_pts(:,1),temp_grid_pts(:,2)));%%%%Calculate Distance
                                 max_knn_dist=ceil(max(knn_dist_bound))
 
                                 %%%%%
                                 if ~isempty(temp_grid_pts)==1
-                                    all_coordination_pts=vertcat(temp_grid_pts,base_protection_pts);
+                                    all_coordination_pts=vertcat(temp_grid_pts,base_protection_pts(:,[1:2]));
                                 else
                                     all_coordination_pts=vertcat(base_protection_pts);
                                 end
@@ -514,7 +515,10 @@ if ~isempty(zero_idx)==1
                                     [sort_non_inf_round_dbm_data,sort_idx]=sort(non_inf_round_dbm_data,'ascend');
                                     sort_non_inf_keep_grid_pts=non_inf_keep_grid_pts(sort_idx,:);
 
-                                    dbm2_range=max(non_inf_round_dbm_data)-min(horzcat(min(non_inf_round_dbm_data),0));
+                                    dbm2_range=max(non_inf_round_dbm_data)-min(horzcat(min(non_inf_round_dbm_data),0))
+                                    if dbm2_range==0
+                                        dbm2_range=1
+                                    end
                                     color_set=plasma(dbm2_range);
 
                                     %%%%%%%%%%%%%%%%Original Linear Heat Map Color set

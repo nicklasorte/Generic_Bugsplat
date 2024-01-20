@@ -1,8 +1,8 @@
-function [grid_points]=wrapper_grid_points_rev1(app,data_label1,min_dist_buff_km,grid_spacing,base_buffer,base_polygon,bs_height)
+function [grid_points]=wrapper_grid_points_rev2_outside_USA(app,data_label1,sim_radius_km,grid_spacing,base_buffer,base_polygon,bs_height)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Step 2: Generate Grid Points
 %%%%%%Check for grid points
-gridpoints_filename=strcat(data_label1,'_grid_points_',num2str(min_dist_buff_km),'km',num2str(grid_spacing),'km.mat');
+gridpoints_filename=strcat(data_label1,'_grid_points_',num2str(sim_radius_km),'km',num2str(grid_spacing),'km.mat');
 [var_exist_grid]=persistent_var_exist_with_corruption(app,gridpoints_filename);
 if var_exist_grid==2
     load(gridpoints_filename,'grid_points')
@@ -63,32 +63,38 @@ else
     raw_grid_points2=raw_grid_points(inside_idx,:);
     toc;
 
-% %     if all(isnan(tf_inside))
-% %         'All is NaN, outside of USA, need to do something else.'
-% %         pause;
-% %     end
+
+    [num_raw_pts1,~]=size(raw_grid_points2)
+    if num_raw_pts1==0
+        'All is NaN, outside of USA, need to do something else.'
+        %%%pause;
+        raw_grid_points2=raw_grid_points; %%%%%%%%%Just keep all the points for now.
+    end
     
     
     %%%%%%%Just in case, filter out the points in the temp_base_points
-    [num_base_pts,~]=size(base_polygon);
-    tic;
-    if num_base_pts==1
-        %%%%%%Don't filter if there is only 1 point
-        grid_points=raw_grid_points2;
-    else
-        [num_raw_pts,~]=size(raw_grid_points2);
-        idx_outside=NaN(num_raw_pts,1);
-        for i=1:1:num_raw_pts
-            tf_in=inpolygon(raw_grid_points2(i,2),raw_grid_points2(i,1),base_polygon(:,2),base_polygon(:,1));
-            if tf_in==0
-                idx_outside(i)=i;
-            end
-        end
-        idx_outside=idx_outside(~isnan(idx_outside));
-        
-        grid_points=raw_grid_points2(idx_outside,:);
-    end
-    toc;
+
+    %%%%%%%Don't filter inside the  base_polygon
+    grid_points=raw_grid_points2;
+% % % %     [num_base_pts,~]=size(base_polygon);
+% % % %     tic;
+% % % %     if num_base_pts==1
+% % % %         %%%%%%Don't filter if there is only 1 point
+% % % %         grid_points=raw_grid_points2;
+% % % %     else
+% % % %         [num_raw_pts,~]=size(raw_grid_points2);
+% % % %         idx_outside=NaN(num_raw_pts,1);
+% % % %         for i=1:1:num_raw_pts
+% % % %             tf_in=inpolygon(raw_grid_points2(i,2),raw_grid_points2(i,1),base_polygon(:,2),base_polygon(:,1));
+% % % %             if tf_in==0
+% % % %                 idx_outside(i)=i;
+% % % %             end
+% % % %         end
+% % % %         idx_outside=idx_outside(~isnan(idx_outside));
+% % % %         
+% % % %         grid_points=raw_grid_points2(idx_outside,:);
+% % % %     end
+% % % %     toc;
     
     %%%%%%%Add Antenna Height=
     grid_points(:,3)=bs_height;
