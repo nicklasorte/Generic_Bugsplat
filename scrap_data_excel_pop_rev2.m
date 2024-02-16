@@ -13,6 +13,7 @@ location_table=table([1:1:length(folder_names)]',folder_names)
 [num_folders,~]=size(folder_names);
 array_rand_folder_idx=1:1:num_folders;
 
+cell_coordination_kml=cell(num_folders,3); %%%%%%%%1) Name ,2) Lat, 3)Lon
 cell_coordination_data=cell(num_folders,1); 
 for folder_idx=1:1:num_folders
     %%%%%%%%%%Calculate
@@ -74,6 +75,21 @@ for folder_idx=1:1:num_folders
 
         cell_coordination_data{folder_idx,1}=dual_cell;
 
+                %%%%%%%%%1)Mitigation
+        %%%%%%%%%2) required_pathloss
+        %%%%%%%%3) max_knn_dist
+        %%%%%%%4) Convex Hull
+
+        cell_coordination_kml{folder_idx,1}=sim_folder;
+        temp_latlon=cell_miti_contour_pop{1,4};
+
+        %%%%%Clockwise
+        [x_cw, y_cw] = poly2cw(temp_latlon(:,2),temp_latlon(:,1));
+        temp_latlon=horzcat(y_cw,x_cw);
+
+        cell_coordination_kml{folder_idx,2}=temp_latlon(:,1);
+        cell_coordination_kml{folder_idx,3}=temp_latlon(:,2);
+
     end
     retry_cd=1;
     while(retry_cd==1)
@@ -94,3 +110,18 @@ end
 table_data=cell2table(vertcat(cell_coordination_data{:}))
 writetable(table_data,strcat('Coordination_Distances__Pop_',num2str(sim_number),'.xlsx'));
 pause(0.1)
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Make the KML file
+geos=geoshape(cell_coordination_kml(:,2),cell_coordination_kml(:,3));
+geos.Name=cell_coordination_kml(:,1);
+geos.Geometry='polygon';
+tic;
+filename_kml=strcat('Rev',num2str(sim_number),'.kml')
+kmlwrite(filename_kml, geos, 'Name', geos.Name, 'Description',{},'EdgeColor','r','FaceColor','w','FaceAlpha',0.5,'LineWidth',3);
+toc;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+

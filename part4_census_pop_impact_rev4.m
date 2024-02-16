@@ -97,7 +97,7 @@ if ~isempty(zero_idx)==1
             complete_filename=strcat(data_label1,'_',label_single_filename,'.mat'); %%%This is a marker for me
             [var_exist]=persistent_var_exist_with_corruption(app,complete_filename);
             if tf_recalculate==1
-                var_exist=0
+                var_exist=0;
             end
 
             if var_exist==2
@@ -153,55 +153,59 @@ if ~isempty(zero_idx)==1
                 mid_lon=new_full_census_2010(:,3);
                 census_pop=new_full_census_2010(:,5);
                 census_geoid=new_full_census_2010(:,1);
-                
+
                 %%%%%%%%%%%For Each contour
                 tic;
                 for row_idx=1:1:num_rows
                     temp_contour=cell_miti_data{row_idx,4};
 
-                    %%%%%might Need to do the rough cut first to speed it up.
-                    min_lat=min(temp_contour(:,1));
-                    max_lat=max(temp_contour(:,1));
-                    min_lon=min(temp_contour(:,2));
-                    max_lon=max(temp_contour(:,2));
+                    if ~isempty(temp_contour)
+                        %%%%%might Need to do the rough cut first to speed it up.
+                        min_lat=min(temp_contour(:,1));
+                        max_lat=max(temp_contour(:,1));
+                        min_lon=min(temp_contour(:,2));
+                        max_lon=max(temp_contour(:,2));
 
-                    lon_idx1=find(min_lon<mid_lon);
-                    lon_idx2=find(max_lon>mid_lon);
-                    cut_lon_idx=intersect(lon_idx1,lon_idx2);
+                        lon_idx1=find(min_lon<mid_lon);
+                        lon_idx2=find(max_lon>mid_lon);
+                        cut_lon_idx=intersect(lon_idx1,lon_idx2);
 
-                    lat_idx1=find(min_lat<mid_lat);
-                    lat_idx2=find(max_lat>mid_lat);
-                    cut_lat_idx=intersect(lat_idx1,lat_idx2);
+                        lat_idx1=find(min_lat<mid_lat);
+                        lat_idx2=find(max_lat>mid_lat);
+                        cut_lat_idx=intersect(lat_idx1,lat_idx2);
 
-                    check_latlon_idx=intersect(cut_lon_idx,cut_lat_idx);
+                        check_latlon_idx=intersect(cut_lon_idx,cut_lat_idx);
 
-                    if ~isempty(check_latlon_idx)
-                        num_lat_check=length(check_latlon_idx);
-                        inside_idx=NaN(num_lat_check,1);
-                        for pos_idx=1:1:num_lat_check
-                            tf_inside=inpolygon(mid_lon(check_latlon_idx(pos_idx)),mid_lat(check_latlon_idx(pos_idx)),temp_contour(:,2),temp_contour(:,1)); %Check to see if the points are in the polygon
-                            if tf_inside==1
-                                inside_idx(pos_idx)=pos_idx;
+                        if ~isempty(check_latlon_idx)
+                            num_lat_check=length(check_latlon_idx);
+                            inside_idx=NaN(num_lat_check,1);
+                            for pos_idx=1:1:num_lat_check
+                                tf_inside=inpolygon(mid_lon(check_latlon_idx(pos_idx)),mid_lat(check_latlon_idx(pos_idx)),temp_contour(:,2),temp_contour(:,1)); %Check to see if the points are in the polygon
+                                if tf_inside==1
+                                    inside_idx(pos_idx)=pos_idx;
+                                end
                             end
-                        end
-                        inside_idx=inside_idx(~isnan(inside_idx));
+                            inside_idx=inside_idx(~isnan(inside_idx));
 
-                        if ~isempty(inside_idx)
-                            keep_latlon_idx=check_latlon_idx(inside_idx);
-                            cell_contour_pop{row_idx,1}=census_geoid(keep_latlon_idx);
-                            cell_contour_pop{row_idx,2}=sum(census_pop(keep_latlon_idx));
+                            if ~isempty(inside_idx)
+                                keep_latlon_idx=check_latlon_idx(inside_idx);
+                                cell_contour_pop{row_idx,1}=census_geoid(keep_latlon_idx);
+                                cell_contour_pop{row_idx,2}=sum(census_pop(keep_latlon_idx));
 
-                            % % %                             figure;
-                            % % %                             hold on;
-                            % % %                             plot(temp_contour(:,2),temp_contour(:,1),'-r')
-                            % % %                             plot(mid_lon(keep_latlon_idx),mid_lat(keep_latlon_idx),'xb')
-                            % % %                             grid on;
-                            % % %                             plot_google_map('maptype','terrain','APIKey','AIzaSyCgnWnM3NMYbWe7N4svoOXE7B2jwIv28F8') %%%Google's API key made by nick.matlab.error@gmail.com
-                            % % %                             pause(0.1)
+                                % % %                             figure;
+                                % % %                             hold on;
+                                % % %                             plot(temp_contour(:,2),temp_contour(:,1),'-r')
+                                % % %                             plot(mid_lon(keep_latlon_idx),mid_lat(keep_latlon_idx),'xb')
+                                % % %                             grid on;
+                                % % %                             plot_google_map('maptype','terrain','APIKey','AIzaSyCgnWnM3NMYbWe7N4svoOXE7B2jwIv28F8') %%%Google's API key made by nick.matlab.error@gmail.com
+                                % % %                             pause(0.1)
+                            else
+                                cell_contour_pop{row_idx,2}=0;
+                            end
+
                         else
                             cell_contour_pop{row_idx,2}=0;
                         end
-
                     else
                         cell_contour_pop{row_idx,2}=0;
                     end
@@ -252,7 +256,7 @@ if ~isempty(zero_idx)==1
                         pause(0.1)
                     end
                 end
-                [cell_status]=update_generic_status_cell_rev1(app,folder_names,sim_folder,cell_status_filename)
+                [cell_status]=update_generic_status_cell_rev1(app,folder_names,sim_folder,cell_status_filename);
                 server_status_rev1(app)
             end
         end
