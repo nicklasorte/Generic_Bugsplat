@@ -87,7 +87,7 @@ for folder_idx=1:1:num_folders
                 pause(0.1)
                 retry_load=0;
             catch
-                retry_load=1;
+                retry_load=1
                 pause(1)
             end
         end
@@ -103,6 +103,10 @@ for folder_idx=1:1:num_folders
          %%%%%Find the idx
         temp_cell_idx=find(strcmp(cell_coordination_data(:,1),sim_folder)==1);
 
+        num_rel_check
+        num_pathloss
+        num_threshold
+        
         if num_rel_check==1 && num_pathloss==1 && num_threshold==1
             cell_coordination_data{temp_cell_idx,2}=cell2mat(cell_rel_idx(3)');
         else
