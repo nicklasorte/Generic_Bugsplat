@@ -1,7 +1,7 @@
-function [base_buffer]=base_buffer_rev1(app,data_label1,min_dist_buff_km,base_polygon)
+function [base_buffer]=base_buffer_rev2_non_bufferm(app,data_label1,buffer_km,base_polygon)
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%STEP 1: Create a buffer around the base
-        buffer_filename=strcat(data_label1,'_base_buffer_',num2str(min_dist_buff_km),'km.mat');
+        buffer_filename=strcat(data_label1,'_base_buffer_',num2str(buffer_km),'km.mat');
         [var_exist_buffer]=persistent_var_exist_with_corruption(app,buffer_filename);
         if var_exist_buffer==2
             %%%%%%Load
@@ -19,18 +19,11 @@ function [base_buffer]=base_buffer_rev1(app,data_label1,min_dist_buff_km,base_po
         elseif var_exist_buffer==0
             %%%%%%%%%%%%%%%%%%%%%%%%bufferm: For a large number of points, this seems  to take a long timE.
             %%%%%%%%%%%%%%%%%%%%%%%%We could revert to the single point and convext.
-            disp_progress(app,strcat('Part0 Grid Points: base_buffer_rev1: Buffering . . .'))
+            disp_progress(app,strcat('Part0 Grid Points: base_buffer_rev2: Buffering . . .'))
             tic;
-            [temp_buff_lat,temp_buff_lon]=bufferm(base_polygon(:,1),base_polygon(:,2),km2deg(min_dist_buff_km),'out',50);
-            %%%base_buffer=horzcat(temp_buff_lat,temp_buff_lon);
+            [base_buffer]=geo_buffer_rev1(app,base_polygon,buffer_km);
             toc;  %%%%%%%%%3 seconds
-            
-            %%%%%%%Polyshape, remove the holes, and turn back into points
-            temp_poly_buff=polyshape(temp_buff_lon,temp_buff_lat);
-            temp_poly_buff=rmholes(temp_poly_buff);
-            base_buffer=temp_poly_buff.Vertices;
-            base_buffer=fliplr(vertcat(base_buffer,base_buffer(1,:)));
-            
+                        
             %%%%%%Save
             retry_save=1;
             while(retry_save==1)

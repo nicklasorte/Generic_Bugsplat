@@ -75,7 +75,10 @@ else
     %%%%%%%Just in case, filter out the points in the temp_base_points
 
     %%%%%%%Don't filter inside the  base_polygon
-    grid_points=raw_grid_points2;
+    num_raw2=length(raw_grid_points2)
+    grid_points=horzcat(raw_grid_points2,NaN(num_raw2,1));
+    grid_points(:,3)=bs_height;  %%%%%%%Add Antenna Height=
+
 % % % %     [num_base_pts,~]=size(base_polygon);
 % % % %     tic;
 % % % %     if num_base_pts==1
@@ -96,8 +99,8 @@ else
 % % % %     end
 % % % %     toc;
     
-    %%%%%%%Add Antenna Height=
-    grid_points(:,3)=bs_height;
+    'Saving the grid points . . .'
+   
     retry_save=1;
     while(retry_save==1)
         try
