@@ -79,8 +79,10 @@ for folder_idx=1:1:num_folders
 
         cell_single_contour=cell(1,3);
         cell_single_contour{1,1}=sim_folder;
-        cell_single_contour{1,2}=cell2mat(cell_miti_contour_pop(1,[2])');
-        cell_single_contour{1,3}=cell2mat(cell_miti_contour_pop(1,[7])');
+        if ~isempty(cell_miti_contour_pop)
+            cell_single_contour{1,2}=cell2mat(cell_miti_contour_pop(1,[2])');
+            cell_single_contour{1,3}=cell2mat(cell_miti_contour_pop(1,[7])');
+        end
         cell_table1{folder_idx,1}=cell_single_contour;
 
         %%%%%%%%%All Miti Distance
@@ -100,14 +102,16 @@ for folder_idx=1:1:num_folders
 
 
         cell_coordination_kml{folder_idx,1}=sim_folder;
-        temp_latlon=cell_miti_contour_pop{1,3};
+        if ~isempty(cell_miti_contour_pop)
+            temp_latlon=cell_miti_contour_pop{1,3};
 
-        %%%%%Clockwise
-        [x_cw, y_cw] = poly2cw(temp_latlon(:,2),temp_latlon(:,1));
-        temp_latlon=horzcat(y_cw,x_cw);
+            %%%%%Clockwise
+            [x_cw, y_cw] = poly2cw(temp_latlon(:,2),temp_latlon(:,1));
+            temp_latlon=horzcat(y_cw,x_cw);
 
-        cell_coordination_kml{folder_idx,2}=temp_latlon(:,1);
-        cell_coordination_kml{folder_idx,3}=temp_latlon(:,2);
+            cell_coordination_kml{folder_idx,2}=temp_latlon(:,1);
+            cell_coordination_kml{folder_idx,3}=temp_latlon(:,2);
+        end
 
     end
     retry_cd=1;
