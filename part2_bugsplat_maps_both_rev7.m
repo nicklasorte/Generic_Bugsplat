@@ -126,11 +126,13 @@ if ~isempty(zero_idx)==1
                         base_protection_pts=temp_data;
                         clear temp_data;
 
-                        load(strcat(data_label1,'_required_pathloss.mat'),'required_pathloss')
-                        temp_data=required_pathloss;
-                        clear required_pathloss;
-                        required_pathloss=temp_data;
-                        clear temp_data;
+                        if tf_calc_rx_angle==0 
+                            load(strcat(data_label1,'_required_pathloss.mat'),'required_pathloss')
+                            temp_data=required_pathloss;
+                            clear required_pathloss;
+                            required_pathloss=temp_data;
+                            clear temp_data;
+                        end
 
                         load(strcat(data_label1,'_sim_array_list_bs.mat'),'sim_array_list_bs')
                         temp_data=sim_array_list_bs;
@@ -140,16 +142,16 @@ if ~isempty(zero_idx)==1
                         % % %      %%%%array_list_bs  %%%%%%%1) Lat, 2)Lon, 3)BS height, 4)BS EIRP 5) Nick Unique ID for each sector, 6)NLCD: R==1/S==2/U==3, 7) Azimuth 8)BS EIRP Mitigation
 
 
-                        load(strcat(data_label1,'_radar_threshold.mat'),'radar_threshold')
-                        temp_data=radar_threshold;
-                        clear radar_threshold;
-                        radar_threshold=temp_data;
-                        clear temp_data;
+% % %                         load(strcat(data_label1,'_radar_threshold.mat'),'radar_threshold')
+% % %                         temp_data=radar_threshold;
+% % %                         clear radar_threshold;
+% % %                         radar_threshold=temp_data;
+% % %                         clear temp_data;
 
                         if tf_calc_rx_angle==1 %%%%%%%Only need to load if we are doing the angles
                             %%%load(strcat(data_label1,'_array_ant_gain_vertical.mat'),'array_ant_gain_vertical')
                             load(strcat(data_label1,'_min_rx_ant_elevation.mat'),'min_rx_ant_elevation')
-                            load(strcat(data_label1,'_pathloss_minus_rx_ant.mat'),'pathloss_minus_rx_ant')
+                            %load(strcat(data_label1,'_pathloss_minus_rx_ant.mat'),'pathloss_minus_rx_ant')
                             load(strcat(data_label1,'_receiver_threshold.mat'),'receiver_threshold')
                             load(strcat(data_label1,'_multi_array_ant_gain_vertical.mat'),'multi_array_ant_gain_vertical')
                         end
