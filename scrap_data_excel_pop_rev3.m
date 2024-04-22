@@ -129,27 +129,33 @@ end
 
 
 %%%%%%%%%%%'Now write an excel table'
-
-table_full_data=cell2table(vertcat(cell_coordination_data{:}));
-table_data1=cell2table(vertcat(cell_table1{:}))
-table_data2=cell2table(vertcat(cell_table2{:}))
-
-
-writetable(table_full_data,strcat('Coordination_Distances__Pop_',num2str(sim_number),'.xlsx'))
-writetable(table_data1,strcat('Base_Coordination_Dist_Pop_',num2str(sim_number),'.xlsx'))
-writetable(table_data2,strcat('All_Miti_Coordination_Dist_',num2str(sim_number),'.xlsx'))
+cell2mat(cell_coordination_data)
+if ~isempty(cell2mat(cell_coordination_data))
+    table_full_data=cell2table(vertcat(cell_coordination_data{:}));
+    writetable(table_full_data,strcat('Coordination_Distances__Pop_',num2str(sim_number),'.xlsx'))
+end
+if ~isempty(cell2mat(cell_table1))
+    table_data1=cell2table(vertcat(cell_table1{:}))
+    writetable(table_data1,strcat('Base_Coordination_Dist_Pop_',num2str(sim_number),'.xlsx'))
+end
+if ~isempty(cell2mat(cell_table2))
+    table_data2=cell2table(vertcat(cell_table2{:}))
+    writetable(table_data2,strcat('All_Miti_Coordination_Dist_',num2str(sim_number),'.xlsx'))
+end
 pause(0.1)
 
 
-
+cell_coordination_kml
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Make the KML file
-geos=geoshape(cell_coordination_kml(:,2),cell_coordination_kml(:,3));
-geos.Name=cell_coordination_kml(:,1);
-geos.Geometry='polygon';
-tic;
-filename_kml=strcat('Rev',num2str(sim_number),'.kml')
-kmlwrite(filename_kml, geos, 'Name', geos.Name, 'Description',{},'EdgeColor','r','FaceColor','w','FaceAlpha',0.5,'LineWidth',3);
-toc;
+if ~isempty(cell2mat(cell_coordination_kml))
+    geos=geoshape(cell_coordination_kml(:,2),cell_coordination_kml(:,3));
+    geos.Name=cell_coordination_kml(:,1);
+    geos.Geometry='polygon';
+    tic;
+    filename_kml=strcat('Rev',num2str(sim_number),'.kml')
+    kmlwrite(filename_kml, geos, 'Name', geos.Name, 'Description',{},'EdgeColor','r','FaceColor','w','FaceAlpha',0.5,'LineWidth',3);
+    toc;
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
