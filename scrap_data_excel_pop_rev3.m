@@ -74,6 +74,7 @@ for folder_idx=1:1:num_folders
         dual_cell{1,2}=cell2mat(cell_miti_contour_pop(:,[2])');
         dual_cell{2,1}=sim_folder;
         dual_cell{2,2}=cell2mat(cell_miti_contour_pop(:,[7])');
+        dual_cell
 
         cell_coordination_data{folder_idx,1}=dual_cell;
 
@@ -129,25 +130,26 @@ end
 
 
 %%%%%%%%%%%'Now write an excel table'
-cell2mat(cell_coordination_data)
-if ~isempty(cell2mat(cell_coordination_data))
+%if ~isempty(cell2mat(cell_coordination_data))
     table_full_data=cell2table(vertcat(cell_coordination_data{:}));
     writetable(table_full_data,strcat('Coordination_Distances__Pop_',num2str(sim_number),'.xlsx'))
-end
-if ~isempty(cell2mat(cell_table1))
+%end
+cell_table1
+%if ~isempty(cell2mat(cell_table1))
     table_data1=cell2table(vertcat(cell_table1{:}))
     writetable(table_data1,strcat('Base_Coordination_Dist_Pop_',num2str(sim_number),'.xlsx'))
-end
-if ~isempty(cell2mat(cell_table2))
+%end
+cell_table2
+%if ~isempty(cell2mat(cell_table2))
     table_data2=cell2table(vertcat(cell_table2{:}))
     writetable(table_data2,strcat('All_Miti_Coordination_Dist_',num2str(sim_number),'.xlsx'))
-end
+%end
 pause(0.1)
 
 
 cell_coordination_kml
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Make the KML file
-if ~isempty(cell2mat(cell_coordination_kml))
+%if ~isempty(cell2mat(cell_coordination_kml))
     geos=geoshape(cell_coordination_kml(:,2),cell_coordination_kml(:,3));
     geos.Name=cell_coordination_kml(:,1);
     geos.Geometry='polygon';
@@ -155,7 +157,7 @@ if ~isempty(cell2mat(cell_coordination_kml))
     filename_kml=strcat('Rev',num2str(sim_number),'.kml')
     kmlwrite(filename_kml, geos, 'Name', geos.Name, 'Description',{},'EdgeColor','r','FaceColor','w','FaceAlpha',0.5,'LineWidth',3);
     toc;
-end
+%end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
