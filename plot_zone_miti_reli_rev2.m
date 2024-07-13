@@ -50,29 +50,33 @@ function [max_knn_dist,convex_bound,max_int_dB]=plot_zone_miti_reli_rev2(app,tem
                                 sort_non_inf_keep_grid_pts=non_inf_keep_grid_pts(sort_idx,:);
 
                                 dbm2_range=max(non_inf_round_dbm_data)-min(horzcat(min(non_inf_round_dbm_data),0));
-                                color_set=plasma(dbm2_range);
 
-                                %%%%%%%%%%%%%%%%Original Linear Heat Map Color set
-                                f1=figure;
-                                AxesH = axes;
-                                hold on;
-                                h2=plot(convex_bound(:,2),convex_bound(:,1),'-g','LineWidth',3,'DisplayName','Coordination Zone');
-                                scatter(sort_non_inf_keep_grid_pts(:,2),sort_non_inf_keep_grid_pts(:,1),10,sort_non_inf_round_dbm_data,'filled');
-                                plot(base_protection_pts(:,2),base_protection_pts(:,1),'ob','LineWidth',3,'DisplayName','Federal System')
-                                h = colorbar;
-                                ylabel(h, 'Margin [dB]')
-                                colormap(f1,color_set)
-                                grid on;
-                                legend([h2])
-                                xlabel('Longitude')
-                                ylabel('Latitude')
-                                title({strcat('Coordination Distance:',num2str(max_knn_dist),'km')})
-                                plot_google_map('maptype','terrain','APIKey','AIzaSyCgnWnM3NMYbWe7N4svoOXE7B2jwIv28F8') %%%Google's API key made by nick.matlab.error@gmail.com
-                                pause(0.1)
-                                filename1=strcat('Convex_Bound','_',data_label1,'_',string_prop_model,'_',num2str(temp_rel),'%_',num2str(grid_spacing),'km_',num2str(miti_dB),'dB.png');
-                                saveas(gcf,char(filename1))
-                                pause(0.1);
-                                close(f1)
+                                dbm2_range
+                                if dbm2_range>0
+                                    color_set=plasma(dbm2_range);
+
+                                    %%%%%%%%%%%%%%%%Original Linear Heat Map Color set
+                                    f1=figure;
+                                    AxesH = axes;
+                                    hold on;
+                                    h2=plot(convex_bound(:,2),convex_bound(:,1),'-g','LineWidth',3,'DisplayName','Coordination Zone');
+                                    scatter(sort_non_inf_keep_grid_pts(:,2),sort_non_inf_keep_grid_pts(:,1),10,sort_non_inf_round_dbm_data,'filled');
+                                    plot(base_protection_pts(:,2),base_protection_pts(:,1),'ob','LineWidth',3,'DisplayName','Federal System')
+                                    h = colorbar;
+                                    ylabel(h, 'Margin [dB]')
+                                    colormap(f1,color_set)
+                                    grid on;
+                                    legend([h2])
+                                    xlabel('Longitude')
+                                    ylabel('Latitude')
+                                    title({strcat('Coordination Distance:',num2str(max_knn_dist),'km')})
+                                    plot_google_map('maptype','terrain','APIKey','AIzaSyCgnWnM3NMYbWe7N4svoOXE7B2jwIv28F8') %%%Google's API key made by nick.matlab.error@gmail.com
+                                    pause(0.1)
+                                    filename1=strcat('Convex_Bound','_',data_label1,'_',string_prop_model,'_',num2str(temp_rel),'%_',num2str(grid_spacing),'km_',num2str(miti_dB),'dB.png');
+                                    saveas(gcf,char(filename1))
+                                    pause(0.1);
+                                    close(f1)
+                                end
                             end
                         else
                             %%%%%Empty
