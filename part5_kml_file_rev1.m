@@ -82,18 +82,22 @@ location_table=table([1:1:length(folder_names)]',folder_names)
      [num_rows,~]=size(cell_bound_miti)
 
 
-     %%%%%%%%%%%For Each contour
+    %%%%%%%%%%%For Each contour
      temp_cell_kml=cell(num_rows,3); %%%1) Name, 2) Lat, 3)Lon
      for row_idx=1:1:num_rows
-         temp_cell_kml{row_idx,1}=strcat(data_label1,'_',num2str(cell_bound_miti{row_idx,1}),'dB');        
          temp_contour=cell_bound_miti{row_idx,3};
          %%%%%%%%%%Clockwise
          [cw_lon,cw_lat] = poly2cw(temp_contour(:,2),temp_contour(:,1));
-         temp_cell_kml{row_idx,2}=cw_lat;
-         temp_cell_kml{row_idx,3}=cw_lon;
+
+         if ~isempty(cw_lon) && ~isempty(cw_lat)
+             temp_cell_kml{row_idx,1}=strcat(data_label1,'_',num2str(cell_bound_miti{row_idx,1}),'dB');
+             temp_cell_kml{row_idx,2}=cw_lat;
+             temp_cell_kml{row_idx,3}=cw_lon;
+         end
      end
      cell_cell_kml_data{folder_idx,1}=temp_cell_kml;
 
+         
      retry_cd=1;
      while(retry_cd==1)
          try
@@ -108,6 +112,10 @@ location_table=table([1:1:length(folder_names)]',folder_names)
  end
 
  cell_kml_data=vertcat(cell_cell_kml_data{:})
+
+
+ %%%%%%Remove empty rows
+cell_kml_data=cell_kml_data(~cellfun(@isempty,cell_kml_data(:,1)),:)
 
  %%%%%%%%%%%%%Save to a kml file
  tic;
