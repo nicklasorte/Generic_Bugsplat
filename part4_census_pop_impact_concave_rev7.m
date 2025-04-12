@@ -5,13 +5,18 @@ function part4_census_pop_impact_concave_rev7(app,rev_folder,folder_names,sim_nu
 server_status_rev2(app,tf_server_status)
 cell_status_filename=strcat('cell_',string_prop_model,'_',num2str(sim_number),'_pop_impact_status.mat')
 label_single_filename=strcat(string_prop_model,'_',num2str(sim_number),'_pop_impact_status')
+checkout_filename=strcat('TF_checkout_',string_prop_model,'_',num2str(sim_number),'_pop_impact_status.mat')
 %location_table=table([1:1:length(folder_names)]',folder_names)
 
 
 
 %%%%%%%%%%Need a list because going through 470 folders takes 17 minutes
 %[cell_status]=initialize_or_load_generic_status_rev1(app,folder_names,cell_status_filename);
-[cell_status,folder_names]=initialize_or_load_generic_status_expand_rev2(app,rev_folder,cell_status_filename);
+%[cell_status,folder_names]=initialize_or_load_generic_status_expand_rev2(app,rev_folder,cell_status_filename);
+tf_update_cell_status=0;
+sim_folder='';  %%%%%Empty sim_folder to not update.
+[cell_status]=checkout_cell_status_rev1(app,checkout_filename,cell_status_filename,sim_folder,folder_names,tf_update_cell_status);
+
 if tf_recalculate==1
     cell_status(:,2)=num2cell(0);
 end
@@ -51,17 +56,21 @@ if ~isempty(zero_idx)==1
     [multi_hWaitbar,multi_hWaitbarMsgQueue]= ParForWaitbarCreateMH_time('Multi-Folder Pop: ',num_folders);    %%%%%%% Create ParFor Waitbar
 
     for folder_idx=1:1:num_folders
-        server_status_rev2(app,tf_server_status)
+        disp_TextArea_PastText(app,strcat('Part4 Census:',num2str(num_folders-folder_idx)))
+        %server_status_rev2(app,tf_server_status)
         %%%%%%%%Before going to the sim folder, check one last time if we
         %%%%%%%%need to go to it, since another server may have already
         %%%%%%%%checked.
 
 
         %%%%%%%Load
-        [cell_status]=initialize_or_load_generic_status_rev1(app,folder_names,cell_status_filename);
-        if tf_recalculate==1
-            cell_status(:,2)=num2cell(0);
-        end
+        %[cell_status]=initialize_or_load_generic_status_rev1(app,folder_names,cell_status_filename);
+              %%%%%%%%%%%%%%Check cell_status
+        tf_update_cell_status=0;
+        sim_folder='';
+        [cell_status]=checkout_cell_status_rev1(app,checkout_filename,cell_status_filename,sim_folder,folder_names,tf_update_cell_status);
+
+        
         sim_folder=temp_folder_names{array_rand_folder_idx(folder_idx)};
         temp_cell_idx=find(strcmp(cell_status(:,1),sim_folder)==1);
 
@@ -116,7 +125,12 @@ if ~isempty(zero_idx)==1
                 end
 
                 %%%%%%%%Update the Cell
-                [cell_status]=update_generic_status_cell_rev1(app,folder_names,sim_folder,cell_status_filename);
+                %[~]=update_generic_status_cell_rev1(app,folder_names,sim_folder,cell_status_filename);
+                 %%%%%%%%Update the cell_status
+                tf_update_cell_status=1;
+                tic;
+                [~]=checkout_cell_status_rev1(app,checkout_filename,cell_status_filename,sim_folder,folder_names,tf_update_cell_status);
+                toc;
             else
 
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Load the data.
@@ -237,7 +251,12 @@ if ~isempty(zero_idx)==1
                         pause(0.1)
                     end
                 end
-                [cell_status]=update_generic_status_cell_rev1(app,folder_names,sim_folder,cell_status_filename);
+                %[~]=update_generic_status_cell_rev1(app,folder_names,sim_folder,cell_status_filename);
+                 %%%%%%%%Update the cell_status
+                tf_update_cell_status=1;
+                tic;
+                [~]=checkout_cell_status_rev1(app,checkout_filename,cell_status_filename,sim_folder,folder_names,tf_update_cell_status);
+                toc;
                 server_status_rev2(app,tf_server_status)
             end
         end
@@ -245,5 +264,6 @@ if ~isempty(zero_idx)==1
     end
     delete(multi_hWaitbarMsgQueue);
     close(multi_hWaitbar);
+    finish_cell_status_rev1(app,rev_folder,cell_status_filename)
 end
 server_status_rev2(app,tf_server_status)

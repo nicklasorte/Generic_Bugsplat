@@ -163,9 +163,9 @@ if ~isempty(zero_idx)==1
                 %%%%%%%%%Make this a function: azi_required_pathloss
                 
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%STEP 1: Create a buffer around the base
-                %[base_buffer]=base_buffer_azi_rev3(app,azi_required_pathloss,data_label1,base_protection_pts);
-                [base_buffer]=base_buffer_azi_rev3(app,wider_keyhole,data_label1,base_protection_pts);
- 
+                %[base_buffer]=base_buffer_azi_rev3(app,wider_keyhole,data_label1,base_protection_pts);
+                [base_buffer]=base_buffer_azi_multi_rev4(app,wider_keyhole,data_label1,base_protection_pts);
+
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Step 2: Generate Grid Points
                % buffer_km=ceil(max(azi_required_pathloss(:,3)));
                 buffer_km=ceil(max(wider_keyhole(:,3)));

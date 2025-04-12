@@ -18,7 +18,8 @@ function [azi_required_pathloss]=calc_azi_pathloss_rev1(app,ant_beamwidth,min_an
             end
 
             %%%%%%%%%%Flip and mirror 
-            min_theta_step=ant_beamwidth/10;
+            %min_theta_step=ant_beamwidth/10;
+                 min_theta_step=min(horzcat(1,ant_beamwidth/10))
             theta_step=min(horzcat(min_theta_step,min(diff(radar_ant_array(:,1)))));
             dual_radar_ant_array=vertcat(horzcat(-1*flipud(radar_ant_array(:,1)),flipud(radar_ant_array(:,2))),radar_ant_array);
             min_theta=floor(min(dual_radar_ant_array(:,1)));
@@ -154,31 +155,49 @@ function [azi_required_pathloss]=calc_azi_pathloss_rev1(app,ant_beamwidth,min_an
 
            break_point_idx=find(diff(non_min_pl_idx)>1);
 
-           first_part=azi_required_pathloss(non_min_pl_idx(1:1:break_point_idx),:);
-            third_part=azi_required_pathloss(non_min_pl_idx([break_point_idx+1]:1:end),:);
+           if isempty(break_point_idx)
+               'Need to add logic'
+               first_part=azi_required_pathloss(non_min_pl_idx,:);
 
-           %%%%%%%%%%%Just keep those with a 1 degree step.
-           below_ds_azi_required_pathloss=azi_required_pathloss(min_pl_idx,:);
-           floor_azi=unique(floor(below_ds_azi_required_pathloss(:,1)));
-           ceil_azi=unique(ceil(below_ds_azi_required_pathloss(:,1)));
-           int_idx=intersect(floor_azi,ceil_azi);
-           nn_below_azi_idx=nearestpoint_app(app,int_idx,azi_required_pathloss(:,1));
+               %%%%%%%%%%%Just keep those with a 1 degree step.
+               below_ds_azi_required_pathloss=azi_required_pathloss(min_pl_idx,:);
+               floor_azi=unique(floor(below_ds_azi_required_pathloss(:,1)));
+               ceil_azi=unique(ceil(below_ds_azi_required_pathloss(:,1)));
+               int_idx=intersect(floor_azi,ceil_azi);
+               nn_below_azi_idx=nearestpoint_app(app,int_idx,azi_required_pathloss(:,1));
 
-           second_part=azi_required_pathloss(nn_below_azi_idx,:);
-           second_part(:,1)=round(second_part(:,1));
+               second_part=azi_required_pathloss(nn_below_azi_idx,:);
+               second_part(:,1)=round(second_part(:,1));
+               ds_azi_required_pathloss=vertcat(second_part,first_part);
+               size(ds_azi_required_pathloss)
 
-           ds_azi_required_pathloss=vertcat(first_part,second_part,third_part);
-           size(ds_azi_required_pathloss)
-           %ds_azi_required_pathloss
+           else
 
-           % close all;
-           % figure;
-           % hold on;
-           % plot(azi_required_pathloss(:,1),azi_required_pathloss(:,2),'-k','LineWidth',3)
-           % plot(ds_azi_required_pathloss(:,1),ds_azi_required_pathloss(:,2),'or','LineWidth',1)
-           % grid on;
-           % pause%(0.1)
-            
+               first_part=azi_required_pathloss(non_min_pl_idx(1:1:break_point_idx),:);
+               third_part=azi_required_pathloss(non_min_pl_idx([break_point_idx+1]:1:end),:);
+
+               %%%%%%%%%%%Just keep those with a 1 degree step.
+               below_ds_azi_required_pathloss=azi_required_pathloss(min_pl_idx,:);
+               floor_azi=unique(floor(below_ds_azi_required_pathloss(:,1)));
+               ceil_azi=unique(ceil(below_ds_azi_required_pathloss(:,1)));
+               int_idx=intersect(floor_azi,ceil_azi);
+               nn_below_azi_idx=nearestpoint_app(app,int_idx,azi_required_pathloss(:,1));
+
+               second_part=azi_required_pathloss(nn_below_azi_idx,:);
+               second_part(:,1)=round(second_part(:,1));
+
+               ds_azi_required_pathloss=vertcat(first_part,second_part,third_part);
+               size(ds_azi_required_pathloss)
+               %ds_azi_required_pathloss
+
+               % close all;
+               % figure;
+               % hold on;
+               % plot(azi_required_pathloss(:,1),azi_required_pathloss(:,2),'-k','LineWidth',3)
+               % plot(ds_azi_required_pathloss(:,1),ds_azi_required_pathloss(:,2),'or','LineWidth',1)
+               % grid on;
+               % pause%(0.1)
+           end
 
        elseif length(break_point_idx)>1
            'Need to add logic because the break point straddles the 0/360 degree'

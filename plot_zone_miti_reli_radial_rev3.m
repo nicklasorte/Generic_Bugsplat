@@ -24,6 +24,12 @@ if ~isempty(idx_keep)
     %%%Find the azimuth from the center to the keep_grid_pts
 
     %%%%%%Bin for each 1 degree step
+    [num_pp_pts,~]=size(base_protection_pts)
+    if num_pp_pts>1
+        'Need to expand for multiple protection points, specifically the non-convex hull radial'
+        pause;
+    end
+    
     point_idx=1
     sim_pt=base_protection_pts(point_idx,:);
     %[radial_bound]=radial_bound_rev1(app,sim_pt,keep_grid_pts);
