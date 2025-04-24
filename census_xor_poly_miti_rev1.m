@@ -24,9 +24,11 @@ for miti_idx=1:1:num_miti
     num_cen=length(mid_lon);
     inside_over_idx=NaN(num_cen,1);
     for k=1:1:num_cen
-        temp_inside_idx=find(isinterior(temp_overlap_poly,mid_lon(k),mid_lat(k)));
-        if ~isempty(temp_inside_idx)
-            inside_over_idx(k)=k;
+        if ~isempty(temp_overlap_poly)
+            temp_inside_idx=find(isinterior(temp_overlap_poly,mid_lon(k),mid_lat(k)));
+            if ~isempty(temp_inside_idx)
+                inside_over_idx(k)=k;
+            end
         end
     end
     inside_over_idx=inside_over_idx(~isnan(inside_over_idx));
@@ -39,9 +41,11 @@ for miti_idx=1:1:num_miti
     num_cen=length(mid_lon);
     inside_xor_idx=NaN(num_cen,1);
     for k=1:1:num_cen
-        temp_inside_idx=find(isinterior(temp_xor_poly,mid_lon(k),mid_lat(k)));
-        if ~isempty(temp_inside_idx)
-            inside_xor_idx(k)=k;
+        if ~isempty(temp_xor_poly)
+            temp_inside_idx=find(isinterior(temp_xor_poly,mid_lon(k),mid_lat(k)));
+            if ~isempty(temp_inside_idx)
+                inside_xor_idx(k)=k;
+            end
         end
     end
     inside_xor_idx=inside_xor_idx(~isnan(inside_xor_idx));

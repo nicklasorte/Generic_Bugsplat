@@ -68,102 +68,132 @@ if tf_rescrap_rev_data==1
         data_label1=sim_folder;
         disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 69:',sim_folder))
 
-        %%%%%Load
-        num_miti=length(array_mitigation);
-        filename_cell_contour_pop=strcat(data_label1,'_cell_miti_contour_pop_',string_prop_model,'_',num2str(num_miti),'_',num2str(grid_spacing),'km.mat');
 
-        [var_exist_cell_rel_idx]=persistent_var_exist_with_corruption(app,filename_cell_contour_pop);
-        if var_exist_cell_rel_idx==2
-            disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 77:',sim_folder))
 
-            retry_load=1;
-            while(retry_load==1)
-                try
-                    load(filename_cell_contour_pop,'cell_miti_contour_pop')
-                    pause(0.1)
-                    retry_load=0;
-                catch
-                    retry_load=1;
-                    pause(1)
+        retry_load=1;
+        while(retry_load==1)
+            try
+                load(strcat(data_label1,'_base_protection_pts.mat'),'base_protection_pts')
+                temp_data=base_protection_pts;
+                clear base_protection_pts;
+                base_protection_pts=temp_data;
+                clear temp_data;
+                retry_load=0;
+            catch
+            end
+        end
+
+        %%%%%%%%'Need to check if its inside the US lower 48'
+        if all(base_protection_pts(:,1)<55) && all(base_protection_pts(:,1)>20) && all(base_protection_pts(:,2)>-140) && all(base_protection_pts(:,2)<-50)
+            % base_protection_pts
+            % close all;
+            % figure;
+            % hold on;
+            % plot(base_protection_pts(:,2),base_protection_pts(:,1),'-og')
+            % grid on;
+            % base_protection_pts
+            % 'Need to check if its inside the US lower 48'
+            % pause;
+
+
+
+            %%%%%Load
+            num_miti=length(array_mitigation);
+            filename_cell_contour_pop=strcat(data_label1,'_cell_miti_contour_pop_',string_prop_model,'_',num2str(num_miti),'_',num2str(grid_spacing),'km.mat');
+
+            [var_exist_cell_rel_idx]=persistent_var_exist_with_corruption(app,filename_cell_contour_pop);
+            if var_exist_cell_rel_idx==2
+                disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 77:',sim_folder))
+
+                retry_load=1;
+                while(retry_load==1)
+                    try
+                        load(filename_cell_contour_pop,'cell_miti_contour_pop')
+                        pause(0.1)
+                        retry_load=0;
+                    catch
+                        retry_load=1;
+                        pause(1)
+                    end
                 end
+                disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 90:',sim_folder))
+                %%%%1)Mitigation,
+                % %%2) Max knn dist,
+                % %%3) Convex Bound,
+                % %%4) Max Interference dB,
+                % %%%5) Prop Reliability
+                %%%%%6) Radial Bound (Concave)
+                %%%%%7) GeoId (Concave),
+                % %%%8) Total Pop (Concave)
+
+
+                dual_cell=cell(2,2);
+                dual_cell{1,1}=sim_folder;
+                dual_cell{1,2}=cell2mat(cell_miti_contour_pop(:,[2])');
+                dual_cell{2,1}=sim_folder;
+                dual_cell{2,2}=cell2mat(cell_miti_contour_pop(:,[8])');
+                %dual_cell
+
+                cell_coordination_data{folder_idx,1}=dual_cell;
+
+                %%%%%Convex
+                cell_convex_zones{folder_idx,1}=sim_folder;
+                cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,3]);
+
+                cell_single_contour=cell(1,3);
+                cell_single_contour{1,1}=sim_folder;
+                if ~isempty(cell_miti_contour_pop)
+                    cell_single_contour{1,2}=cell2mat(cell_miti_contour_pop(1,[2])');
+                    cell_single_contour{1,3}=cell2mat(cell_miti_contour_pop(1,[8])');
+                end
+                cell_table_0dB_dist_pop{folder_idx,1}=cell_single_contour;
+
+                %%%%%%%%%All Miti Distance
+                cell_multi_contour=cell(1,2);
+                cell_multi_contour{1,1}=sim_folder;
+                cell_multi_contour{1,2}=cell2mat(cell_miti_contour_pop(:,[2])');
+                cell_table_all_dist{folder_idx,1}=cell_multi_contour;
+
+                %%%%%%%%%All Miti Population
+                cell_table_all_pop{folder_idx,1}=sim_folder;
+                cell_table_all_pop{folder_idx,2}=cell2mat(cell_miti_contour_pop(:,[8])');
+
+
+                %%%%%%%%%%Gather the GEO Id
+                cell_geo_id{folder_idx,1}=sim_folder;
+                cell_geo_id{folder_idx,2}=cell_miti_contour_pop{1,7};
+
+                %%%%1)Mitigation,
+                % %%2) Max knn dist,
+                % %%3)Convex Bound,
+                % %%4)Max Interference dB,
+                % %%%5)Prop Reliability
+                %%%%%6)Radial Bound
+                %%%%%7) GeoId,
+                % %%%8) Total Pop
+
+
+                %%%%1)Mitigation,
+                % %%2) Max knn dist,
+                % %%3)Convex Bound,
+                % %%4)Max Interference dB,
+                % %%%5)Prop Reliability
+                %%%%%6) GeoId,
+                % %%%7) Total Pop
+
+                cell_coordination_kml{folder_idx,1}=sim_folder;
+                if ~isempty(cell_miti_contour_pop)
+                    temp_latlon=cell_miti_contour_pop{1,6};
+
+                    %%%%%Clockwise
+                    [x_cw, y_cw] = poly2cw(temp_latlon(:,2),temp_latlon(:,1));
+                    temp_latlon=horzcat(y_cw,x_cw);
+
+                    cell_coordination_kml{folder_idx,2}=temp_latlon(:,1);
+                    cell_coordination_kml{folder_idx,3}=temp_latlon(:,2);
+                end
+
             end
-            disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 90:',sim_folder))
-            %%%%1)Mitigation,
-            % %%2) Max knn dist,
-            % %%3) Convex Bound,
-            % %%4) Max Interference dB,
-            % %%%5) Prop Reliability
-            %%%%%6) Radial Bound (Concave)
-            %%%%%7) GeoId (Concave),
-            % %%%8) Total Pop (Concave)
-
-
-            dual_cell=cell(2,2);
-            dual_cell{1,1}=sim_folder;
-            dual_cell{1,2}=cell2mat(cell_miti_contour_pop(:,[2])');
-            dual_cell{2,1}=sim_folder;
-            dual_cell{2,2}=cell2mat(cell_miti_contour_pop(:,[8])');
-            %dual_cell
-
-            cell_coordination_data{folder_idx,1}=dual_cell;
-
-            %%%%%Convex
-            cell_convex_zones{folder_idx,1}=sim_folder;
-            cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,3]);
-
-            cell_single_contour=cell(1,3);
-            cell_single_contour{1,1}=sim_folder;
-            if ~isempty(cell_miti_contour_pop)
-                cell_single_contour{1,2}=cell2mat(cell_miti_contour_pop(1,[2])');
-                cell_single_contour{1,3}=cell2mat(cell_miti_contour_pop(1,[8])');
-            end
-            cell_table_0dB_dist_pop{folder_idx,1}=cell_single_contour;
-
-            %%%%%%%%%All Miti Distance
-            cell_multi_contour=cell(1,2);
-            cell_multi_contour{1,1}=sim_folder;
-            cell_multi_contour{1,2}=cell2mat(cell_miti_contour_pop(:,[2])');
-            cell_table_all_dist{folder_idx,1}=cell_multi_contour;
-
-            %%%%%%%%%All Miti Population
-            cell_table_all_pop{folder_idx,1}=sim_folder;
-            cell_table_all_pop{folder_idx,2}=cell2mat(cell_miti_contour_pop(:,[8])');
-
-
-            %%%%%%%%%%Gather the GEO Id
-            cell_geo_id{folder_idx,1}=sim_folder;
-            cell_geo_id{folder_idx,2}=cell_miti_contour_pop{1,7};
-
-            %%%%1)Mitigation,
-            % %%2) Max knn dist,
-            % %%3)Convex Bound,
-            % %%4)Max Interference dB,
-            % %%%5)Prop Reliability
-            %%%%%6)Radial Bound
-            %%%%%7) GeoId,
-            % %%%8) Total Pop
-
-
-            %%%%1)Mitigation,
-            % %%2) Max knn dist,
-            % %%3)Convex Bound,
-            % %%4)Max Interference dB,
-            % %%%5)Prop Reliability
-            %%%%%6) GeoId,
-            % %%%7) Total Pop
-
-            cell_coordination_kml{folder_idx,1}=sim_folder;
-            if ~isempty(cell_miti_contour_pop)
-                temp_latlon=cell_miti_contour_pop{1,6};
-
-                %%%%%Clockwise
-                [x_cw, y_cw] = poly2cw(temp_latlon(:,2),temp_latlon(:,1));
-                temp_latlon=horzcat(y_cw,x_cw);
-
-                cell_coordination_kml{folder_idx,2}=temp_latlon(:,1);
-                cell_coordination_kml{folder_idx,3}=temp_latlon(:,2);
-            end
-
         end
         retry_cd=1;
         while(retry_cd==1)
@@ -178,6 +208,16 @@ if tf_rescrap_rev_data==1
         end
     end
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 180'))
+
+
+    %%%%%%%Remove empty cells
+    cell_coordination_kml=cell_coordination_kml(~cellfun('isempty',cell_coordination_kml(:,1)),:);
+    cell_geo_id=cell_geo_id(~cellfun('isempty',cell_geo_id(:,1)),:);
+    cell_convex_zones=cell_convex_zones(~cellfun('isempty',cell_convex_zones(:,1)),:);
+    cell_table_all_pop=cell_table_all_pop(~cellfun('isempty',cell_table_all_pop(:,1)),:);
+    cell_coordination_data=cell_coordination_data(~cellfun('isempty',cell_coordination_data(:,1)),:);
+    cell_table_0dB_dist_pop=cell_table_0dB_dist_pop(~cellfun('isempty',cell_table_0dB_dist_pop(:,1)),:);
+    cell_table_all_dist=cell_table_all_dist(~cellfun('isempty',cell_table_all_dist(:,1)),:);
 
 
     %%%%%Save 1
@@ -228,8 +268,11 @@ if tf_rescrap_rev_data==1
     %%%%%%%%%%%'Now write an excel table'
     %%%%%%%%All the population for each mitigation.
     table_full_pop_data=cell2table(cell_table_all_pop)
+    %table_full_pop_data=cell2table(horzcat(cell_table_all_pop(:,1),num2cell(cell2mat(cell_table_all_pop(:,[2:end])))));
     writetable(table_full_pop_data,strcat('Coordination_All_Pop_',num2str(sim_number),'.xlsx'))
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 232'))
+
+
 
     %if ~isempty(cell2mat(cell_coordination_data))
     table_full_data=cell2table(vertcat(cell_coordination_data{:}))

@@ -64,11 +64,15 @@ toc;
 
 
 
-   cell_xor_poly=cell(num_miti,1);
-    for miti_idx=1:1:num_miti
-        temp_overlap_poly=cell_overlap_poly{miti_idx};
-        temp_merge_poly=cell_poly_merge{miti_idx};
+cell_xor_poly=cell(num_miti,1);
+for miti_idx=1:1:num_miti
+    temp_overlap_poly=cell_overlap_poly{miti_idx};
+    temp_merge_poly=cell_poly_merge{miti_idx};
+    if isempty(temp_overlap_poly)==1
+        cell_xor_poly{miti_idx}=temp_merge_poly;
+    else
         temp_xor=xor(temp_merge_poly,temp_overlap_poly);
         cell_xor_poly{miti_idx}=temp_xor;
     end
+end
 end

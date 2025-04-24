@@ -96,7 +96,9 @@ for pea_idx=1:1:number_markets
     end
 end
 
-plot(temp_overlap_poly,'FaceColor','k','FaceAlpha',0.2)
+if ~isempty(temp_overlap_poly)
+    plot(temp_overlap_poly,'FaceColor','k','FaceAlpha',0.2)
+end
 h1=plot(single_poly_merge,'FaceColor','none','FaceAlpha',0.25,'EdgeColor','k','LineStyle',':');
 
 
