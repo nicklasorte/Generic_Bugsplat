@@ -1,5 +1,4 @@
-function scrap_data_DSN_EESS_pop_geo_id_pea_rev7(app,tf_rescrap_rev_data,sim_number,string_prop_model,array_mitigation,rev_folder,tf_server_status,reliability,tf_convex)
-
+function scrap_data_pop_geo_id_pea_rev8_single_folder(app,tf_rescrap_rev_data,sim_number,string_prop_model,array_mitigation,rev_folder,tf_server_status,reliability,tf_convex)
 
 if tf_convex==1
     convex_label='convex'
@@ -29,8 +28,26 @@ disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 21
 
 if tf_rescrap_rev_data==1
     server_status_rev2(app,tf_server_status)
-    [sim_number,folder_names,num_folders]=check_rev_folders(app,rev_folder);
-    %location_table=table([1:1:length(folder_names)]',folder_names)
+
+    %%%[sim_number,folder_names,num_folders]=check_rev_folders(app,rev_folder);
+    [sim_number,~,~]=check_rev_folders(app,rev_folder)
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Find all the xlsx files in the folder.
+    folder_info=dir%(sim_folder);
+    x3=length(folder_info);
+    file_name=cell(x3,1);
+    for i=1:1:x3
+        file_name{i}=folder_info(i).name;
+    end
+    cell_bound_miti_idx=find(startsWith(file_name,strcat('cell_bound_',string_prop_model,'_',num2str(sim_number),'_'))==1);
+    cell_bound_file=file_name(cell_bound_miti_idx);
+    cell_split_file=cellfun(@(x) strsplit(x, '.mat'), cell_bound_file, 'UniformOutput', false);
+    cell_split_file=vertcat(cell_split_file{:});
+    cell_list_file=cell_split_file(:,1);
+    cell_split2_file=cellfun(@(x) strsplit(x,strcat('cell_bound_',string_prop_model,'_',num2str(sim_number),'_')), cell_list_file, 'UniformOutput', false);
+    cell_expand=vertcat(cell_split2_file{:});
+    folder_names=cell_expand(:,2)
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    num_folders=length(folder_names);
     array_rand_folder_idx=1:1:num_folders;
 
     %%%%%%%%%%%%%%%%%%%%Instead of status file, the data with the neighborhood
@@ -46,37 +63,14 @@ if tf_rescrap_rev_data==1
     cell_convex_zones=cell(num_folders,2); %%%%%%%%%1)Name, 2)Mitigation/ConvexZone
     for folder_idx=1:1:num_folders
         disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 42: folder_idx:',num2str(folder_idx)))
-        %%%%%%%%%%Calculate
-        retry_cd=1;
-        while(retry_cd==1)
-            try
-                cd(rev_folder)
-                pause(0.1);
-                retry_cd=0;
-            catch
-                retry_cd=1;
-                pause(0.1)
-            end
-        end
-
-        retry_cd=1;
-        while(retry_cd==1)
-            try
-                sim_folder=folder_names{array_rand_folder_idx(folder_idx)}
-                cd(sim_folder)
-                pause(0.1);
-                retry_cd=0;
-            catch
-                retry_cd=1;
-                pause(0.1)
-            end
-        end
+        sim_folder=folder_names{array_rand_folder_idx(folder_idx)}
         data_label1=sim_folder;
         disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 69:',sim_folder))
 
 
+
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Load
-         file_name_cell_bound_miti=strcat('cell_bound_',string_prop_model,'_',num2str(sim_number),'_',data_label1,'.mat');
+        file_name_cell_bound_miti=strcat('cell_bound_',string_prop_model,'_',num2str(sim_number),'_',data_label1,'.mat');
         [var_exist_cell_rel_idx]=persistent_var_exist_with_corruption(app,file_name_cell_bound_miti);
         if var_exist_cell_rel_idx==2
             disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 77:',sim_folder))
@@ -102,22 +96,23 @@ if tf_rescrap_rev_data==1
             %%%%%7) GeoId (Concave),
             % %%%8) Total Pop (Concave)
 
-               %%%%1)Mitigation,
-                % %%2) Max knn dist,
-                % %%3)Convex Bound,
-                % %%4)Max Interference dB,
-                % %%%5)Prop Reliability
-                %%%%%6)Radial Bound
-                %%%%%7)Convex GeoId,
-                %%%%%8)Convex Total Pop
-                %%%%%9)Concave GeoId,
-                %%%%%10)Concave Total Pop
+            %%%%1)Mitigation,
+            % %%2) Max knn dist,
+            % %%3)Convex Bound,
+            % %%4)Max Interference dB,
+            % %%%5)Prop Reliability
+            %%%%%6)Radial Bound
+            %%%%%7)Convex GeoId,
+            %%%%%8)Convex Total Pop
+            %%%%%9)Concave GeoId,
+            %%%%%10)Concave Total Pop
 
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Reduce the the single reliability
-                 %%%cell_bound_miti=cell(num_miti,10,num_per);
-                cell_bound_miti(:,5,:)
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Reduce the the single reliability
+            %%%cell_bound_miti=cell(num_miti,10,num_per);
+            cell_bound_miti
+            [x1,y1,z1]=size(cell_bound_miti)
 
-                [x1,y1,z1]=size(cell_bound_miti)
+            if z1>1
                 keep_idx=NaN(1,1);
                 for rel_row_idx=1:1:z1
                     temp_cell_rel=cell_bound_miti(:,5,rel_row_idx);
@@ -134,7 +129,11 @@ if tf_rescrap_rev_data==1
                     pause;
                 end
                 cell_miti_contour_pop=squeeze(cell_bound_miti(:,:,keep_idx));
-                cell_miti_contour_pop=cell_miti_contour_pop(~cellfun('isempty',cell_miti_contour_pop(:,2)),:)
+            else
+                cell_miti_contour_pop=squeeze(cell_bound_miti);
+            end
+
+            cell_miti_contour_pop=cell_miti_contour_pop(~cellfun('isempty',cell_miti_contour_pop(:,2)),:)
 
             %%%%%%%%%%%%%%%%%%%%%%%%%%%
             dual_cell=cell(2,2);
@@ -223,22 +222,8 @@ if tf_rescrap_rev_data==1
                 %%%%%Clockwise
                 [x_cw, y_cw] = poly2cw(temp_latlon(:,2),temp_latlon(:,1));
                 temp_latlon=horzcat(y_cw,x_cw);
-
                 cell_coordination_kml{folder_idx,2}=temp_latlon(:,1);
                 cell_coordination_kml{folder_idx,3}=temp_latlon(:,2);
-            end
-
-        end
-
-        retry_cd=1;
-        while(retry_cd==1)
-            try
-                cd(rev_folder)
-                pause(0.1);
-                retry_cd=0;
-            catch
-                retry_cd=1;
-                pause(0.1)
             end
         end
     end
@@ -462,6 +447,7 @@ if tf_rescrap_rev_data==1
         filename_overlay_plot=strcat('Overlay_Single_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.png')
         plot_nationwide_single_overlap_rev2_filename(app,sim_number,cell_poly_merge,cell_overlap_poly,filename_overlay_plot)
 
+
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Just the single
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%coorindation zone
         filename_single_plot=strcat('Single_Nationwide_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.png')
@@ -579,7 +565,7 @@ if tf_rescrap_rev_data==1
     retry_save=1;
     while(retry_save==1)
         try
-           writetable(table_pea,strcat('PEA_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'));
+            writetable(table_pea,strcat('PEA_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'));
             pause(0.1)
             retry_save=0;
         catch
@@ -587,6 +573,7 @@ if tf_rescrap_rev_data==1
             pause(1)
         end
     end
+
 
     %%%%%%%%%%Simplify
     array_pea_data=cell2mat(temp_cell_pea_hist_poly(:,[4,5,6]));
@@ -605,6 +592,31 @@ if tf_rescrap_rev_data==1
             pause(1)
         end
     end
+
+
+    %%%1)Xor Covered Pop, 2)Overlap Covered Pop, 3)Uncovered Pop, 4)xor Percentage, 5)Overlap Percentage, 6)Avaiable Percentage
+
+    array_pop_pea_data=cell2mat(temp_cell_pea_hist_poly(:,[1,2,3]));
+    covered_pop=sum(sum(array_pop_pea_data(:,[1,2])))
+    free_pop=sum(array_pop_pea_data(:,3))
+    total_pop=sum(sum(array_pop_pea_data))
+
+    free_pop/total_pop
+    table_pea=array2table(free_pop/total_pop);
+    table_pea.Properties.VariableNames={'Percentage_Unencumbered'}
+    retry_save=1;
+    while(retry_save==1)
+        try
+            writetable(table_pea,strcat('FREE_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'));
+            pause(0.1)
+            retry_save=0;
+        catch
+            retry_save=1;
+            pause(1)
+        end
+    end
+
+
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 528'))
 else
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 530'))

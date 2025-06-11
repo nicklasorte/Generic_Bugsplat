@@ -22,7 +22,7 @@ end
 %load('cell_pea_census_data.mat','cell_pea_census_data')
 %%%%%1)PEA Name, 2)PEA Num, 3)PEA {Lat/Lon}, 4)PEA Pop, 5)PEA Centroid, 6)Census {Geo ID}, 7)Census{Population}, 8)Census{NLCD}, 9)Census Centroid
 
-num_miti=length(array_mitigation)
+num_miti=1%length(array_mitigation)
 [num_peas,~]=size(cell_pea_census_data)
 
 cell_pea_hist_poly=cell(num_miti,num_peas,6);%%%1)Xor Covered Pop, 2)Overlap Covered Pop, 3)Uncovered Pop, 4)xor Percentage, 5)Overlap Percentage, 6)Avaiable Percentage
