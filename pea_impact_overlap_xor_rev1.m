@@ -14,7 +14,7 @@ while(retry_load==1)
         pause(0.1)
         retry_load=0;
     catch
-        retry_load=1;
+        retry_load=1
         pause(1)
     end
 end
