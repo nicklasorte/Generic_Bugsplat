@@ -35,7 +35,7 @@ cell_status
 
 if ~isempty(zero_idx)==1
     temp_folder_names=folder_names(zero_idx)
-    num_folders=length(temp_folder_names);
+    num_folders=length(temp_folder_names)
 
     %%%%%%%%Pick a random folder and go to the folder to do the sim
     disp_progress(app,strcat('Mapping . . .'))
@@ -84,9 +84,10 @@ if ~isempty(zero_idx)==1
     [multi_hWaitbar,multi_hWaitbarMsgQueue]= ParForWaitbarCreateMH_time('Multi-Folder Mapping: ',num_folders);    %%%%%%% Create ParFor Waitbar
 
     for folder_idx=1:1:num_folders
+        num_folders-folder_idx
         disp_TextArea_PastText(app,strcat('Part2 Maps:',num2str(num_folders-folder_idx)))
 
-               %%%%%%%%%%%%%%Check cell_status
+         %%%%%%%%%%%%%Check cell_status
         tf_update_cell_status=0;
         sim_folder='';
         [cell_status]=checkout_cell_status_rev1(app,checkout_filename,cell_status_filename,sim_folder,folder_names,tf_update_cell_status);
@@ -435,13 +436,26 @@ if ~isempty(zero_idx)==1
                     geoplot(larger_radial_bound(:,1),larger_radial_bound(:,2),'-r')
                     grid on;
                     geobasemap streets-light%landcover
-                    f2.Position = [100 100 1200 900];
-                    pause(1)
+                    %f2.Position = [100 100 1200 900];
+                    %pause(1)
                     filename1=strcat('Insufficient_Buffer_',data_label1,'_',string_prop_model,'.png');
-                    saveas(gcf,char(filename1))
+                    retry_save=1;
+                    while(retry_save==1)
+                        try
+                            saveas(gcf,char(filename1))
+                            pause(0.1);
+                            retry_save=0;
+                        catch
+                            retry_save=1;
+                            pause(0.1)
+                        end
+                    end
+                   
                     pause(0.1);
                     close(f2)
                 end
+
+
     
    
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

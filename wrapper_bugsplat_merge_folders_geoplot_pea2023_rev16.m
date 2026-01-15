@@ -98,7 +98,7 @@ part2_bugsplat_maps_azimuth_radial_multi_pop2023_geoplot_rev14(app,rev_folder,re
 
 % % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%part 4 Census Pop Impact
 tf_convex=1
-tf_rescrap_rev_data=1%0
+%tf_rescrap_rev_data=1%0
 %scrap_data_pop_geo_id_pea_rev8(app,tf_rescrap_rev_data,sim_number,string_prop_model,array_mitigation,rev_folder,tf_server_status,reliability,tf_convex)
 scrap_data_pop_geo_id_pea_2023_rev9(app,tf_rescrap_rev_data,sim_number,string_prop_model,array_mitigation,rev_folder,tf_server_status,reliability,tf_convex)
 
