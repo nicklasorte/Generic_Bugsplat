@@ -1,0 +1,201 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration file="C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Generic_Bugsplat\bugsplat_angles_rev3_2.prj" location="C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Generic_Bugsplat" name="bugsplat_angles_rev3_2" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>bugsplat_angles_rev3_2</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>3.2</param.version>
+    <param.authnamewatermark />
+    <param.email />
+    <param.company />
+    <param.summary />
+    <param.description />
+    <param.screenshot />
+    <param.guid />
+    <param.installpath.string>\bugsplat_angles_rev3_2\</param.installpath.string>
+    <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}\bugsplat_angles_rev3_2\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\bugsplat_angles_rev3_2\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\bugsplat_angles_rev3_2\for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}\bugsplat_angles_rev3_2</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>true</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <param.native.matlab>false</param.native.matlab>
+    <param.checkbox>false</param.checkbox>
+    <param.example />
+    <param.help.text>Syntax 
+	  -? 
+	 
+ Input Arguments 
+	 -?  print help on how to use the application 
+	 input arguments</param.help.text>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.summary />
+      <param.description />
+      <param.screenshot />
+      <param.guid />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.logo />
+      <param.install.notes />
+      <param.target.install.notes />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.logdir />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.create.log />
+      <param.log.file />
+      <param.native.matlab />
+      <param.checkbox />
+      <param.example />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\bugsplat_angles_rev3_2.mlapp</file>
+    </fileset.main>
+    <fileset.resources>
+      <file>C:\USGS\SEADLib.dll</file>
+    </fileset.resources>
+    <fileset.package />
+    <fileset.depfun>
+      <file>C:\Local Matlab Data\Local MAT Data\TropoClim.mat</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\binary_shape_merge_rev1.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\checkout_cell_status_rev1.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\convert_polyshape2geopolyshape.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\curvspace_app.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\disp_TextArea_PastText.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\find_points_inside_contour_two_step.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\finish_cell_status_rev1.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\geo_buffer_azi_rev1.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\get_rev_folder_number.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\map_multi_contours_rev1.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\nearestpoint_app.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\ParForWaitbarCreateMH_time.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\ParForWaitbarProgressMH_time.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Basic_Functions\radial_bound_rev2.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Census_Functions\Cascade_new_full_census_2023_UA.mat</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Census_Functions\cell_pea_census_data_2020_2023.mat</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Census_Functions\persistent_var_exist_with_corruption.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Movelist\horizontal_antenna_loss_app.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Movelist\load_data_mitigation_dB.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\check_tirem_rev1.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\clutter_p2108_50.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\data_N050.mat</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\disp_multifolder.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\disp_randfolder.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\find_refrac_itu452_par_GUI.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\find_tropo_itu617_parfor_GUI.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\fix_inf_pathloss_rev1.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\get_txt_value_GUI.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\ITMP2P_mechanism_rev4_embed_height.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\load_data_confidence.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\load_data_FreqMHz.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\load_data_grid_spacing.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\load_data_reliability.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\load_data_tf_clutter.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\load_data_Tpol.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\load_full_pathloss_info_multi_rel_rev3.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\matlab_longley_rice_angles_rev2.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\P2001_mechanism_rev1.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\parfor_rand_parchunk_PropModel_precheck_order_rev9.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\part1_calc_pathloss_clutter2108_max64_rev13.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\persistent_delete_rev1.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\plot_pathloss_heatmat_reli_geoplot_rev3.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\plot_prop_mechanism_heatmap_geoplot_rev2.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\recommend_num_workers.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\server_status_rev2.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\simple_persistent_var_exist.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\start_parpool_poolsize_app.m</file>
+      <file>C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\General_Terrestrial_Pathloss\TIREM5_mechanism_angles_rev4.m</file>
+      <file>${PROJECT_ROOT}\base_buffer_azi_multi_rev4.m</file>
+      <file>${PROJECT_ROOT}\calc_azi_pathloss_rev1.m</file>
+      <file>${PROJECT_ROOT}\census2020_xor_poly_miti_rev2.m</file>
+      <file>${PROJECT_ROOT}\check_ml_toolbox.m</file>
+      <file>${PROJECT_ROOT}\check_rev_folders.m</file>
+      <file>${PROJECT_ROOT}\create_save_load_azi_required_pathloss_rev2.m</file>
+      <file>${PROJECT_ROOT}\create_save_load_wider_keyhole_rev2.m</file>
+      <file>${PROJECT_ROOT}\create_wider_keyhole_rev1.m</file>
+      <file>${PROJECT_ROOT}\disp_progress.m</file>
+      <file>${PROJECT_ROOT}\ds_poly_us_cont_50km.mat</file>
+      <file>${PROJECT_ROOT}\grid_points_app.m</file>
+      <file>${PROJECT_ROOT}\load_data_bs_eirp_reductions.m</file>
+      <file>${PROJECT_ROOT}\load_data_cell_sim_data.m</file>
+      <file>${PROJECT_ROOT}\load_data_sim_scale_factor.m</file>
+      <file>${PROJECT_ROOT}\load_data_tx_height_m.m</file>
+      <file>${PROJECT_ROOT}\part0_grid_pts_azi_pathloss_folders_rev7_custant.m</file>
+      <file>${PROJECT_ROOT}\part2_bugsplat_maps_azimuth_radial_multi_pop2023_geoplot_rev14.m</file>
+      <file>${PROJECT_ROOT}\pea_impact_overlap_xor_2020_rev2.m</file>
+      <file>${PROJECT_ROOT}\plasma.m</file>
+      <file>${PROJECT_ROOT}\plot_multi_radial_zones_reli_geoplot_rev5.m</file>
+      <file>${PROJECT_ROOT}\plot_multi_zones_reli_geoplot_rev4.m</file>
+      <file>${PROJECT_ROOT}\plot_nationwide_poly_miti_rev2_filename.m</file>
+      <file>${PROJECT_ROOT}\plot_nationwide_single_overlap_rev2_filename.m</file>
+      <file>${PROJECT_ROOT}\plot_pea_overlap_2023_rev3_filename.m</file>
+      <file>${PROJECT_ROOT}\plot_zone_miti_reli_radial_multi_geoplot_rev5.m</file>
+      <file>${PROJECT_ROOT}\polymerge_multi_miti_rev1.m</file>
+      <file>${PROJECT_ROOT}\scrap_data_pop_geo_id_pea_2023_rev9.m</file>
+      <file>${PROJECT_ROOT}\wrapper_bugsplat_merge_folders_geoplot_pea2023_rev16.m</file>
+      <file>${PROJECT_ROOT}\wrapper_grid_points_rev2_outside_USA.m</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}\bugsplat_angles_rev3_2\for_testing" name="bugsplat_angles_rev3_2.exe" optional="false">C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Generic_Bugsplat\bugsplat_angles_rev3_2\for_testing\bugsplat_angles_rev3_2.exe</file>
+      <file location="${PROJECT_ROOT}\bugsplat_angles_rev3_2\for_testing" name="splash.png" optional="false">C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Generic_Bugsplat\bugsplat_angles_rev3_2\for_testing\splash.png</file>
+      <file location="${PROJECT_ROOT}\bugsplat_angles_rev3_2\for_testing" name="readme.txt" optional="true">C:\Users\nlasorte\OneDrive - National Telecommunications and Information Administration\MATLAB2024\Generic_Bugsplat\bugsplat_angles_rev3_2\for_testing\readme.txt</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2024b</root>
+      <toolboxes>
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.0</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

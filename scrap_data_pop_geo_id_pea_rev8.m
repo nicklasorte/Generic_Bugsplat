@@ -12,9 +12,9 @@ end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Scrap Data for table.
-filename_cell_kml_data=strcat('cell_coordination_kml_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(reliability),'%.mat');
-filename_cell_geo_id=strcat('cell_geo_id_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(reliability),'%.mat');
-filename_cell_convex_zone=strcat('cell_',convex_label,'_zones_',string_prop_model,'_',num2str(sim_number),'_',num2str(reliability),'%.mat');
+filename_cell_kml_data=strcat('cell_coordination_kml_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.mat')
+filename_cell_geo_id=strcat('cell_geo_id_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.mat');
+filename_cell_convex_zone=strcat('cell_',convex_label,'_zones_',string_prop_model,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.mat');
 disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 9'))
 
 if tf_rescrap_rev_data==0
@@ -254,7 +254,7 @@ if tf_rescrap_rev_data==1
 
 
     %%%%%%%Remove empty cells
-    cell_coordination_kml=cell_coordination_kml(~cellfun('isempty',cell_coordination_kml(:,1)),:);
+    cell_coordination_kml=cell_coordination_kml(~cellfun('isempty',cell_coordination_kml(:,1)),:)
     cell_geo_id=cell_geo_id(~cellfun('isempty',cell_geo_id(:,1)),:);
     cell_convex_zones=cell_convex_zones(~cellfun('isempty',cell_convex_zones(:,1)),:);
     cell_table_all_pop=cell_table_all_pop(~cellfun('isempty',cell_table_all_pop(:,1)),:);
@@ -272,7 +272,7 @@ if tf_rescrap_rev_data==1
             pause(0.1)
             retry_save=0;
         catch
-            retry_save=1;
+            retry_save=1
             pause(1)
         end
     end
@@ -287,7 +287,7 @@ if tf_rescrap_rev_data==1
             pause(0.1)
             retry_save=0;
         catch
-            retry_save=1;
+            retry_save=1
             pause(1)
         end
     end
@@ -312,25 +312,25 @@ if tf_rescrap_rev_data==1
     %%%%%%%%All the population for each mitigation.
     table_full_pop_data=cell2table(cell_table_all_pop)
     %table_full_pop_data=cell2table(horzcat(cell_table_all_pop(:,1),num2cell(cell2mat(cell_table_all_pop(:,[2:end])))));
-    writetable(table_full_pop_data,strcat(convex_label,'_Coordination_All_Pop_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'))
+    writetable(table_full_pop_data,strcat(convex_label,'_Coordination_All_Pop_',num2str(sim_number),'_',num2str(min(reliability)),'%.xlsx'))
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 232'))
 
 
     %if ~isempty(cell2mat(cell_coordination_data))
     table_full_data=cell2table(vertcat(cell_coordination_data{:}))
-    writetable(table_full_data,strcat(convex_label,'_Coordination_Distances__Pop_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'))
+    writetable(table_full_data,strcat(convex_label,'_Coordination_Distances__Pop_',num2str(sim_number),'_',num2str(min(reliability)),'%.xlsx'))
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 237'))
     %end
 
     %if ~isempty(cell2mat(cell_table1))
     table_data1=cell2table(vertcat(cell_table_0dB_dist_pop{:}))
-    writetable(table_data1,strcat(convex_label,'_Base_Coordination_Dist_Pop_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'))
+    writetable(table_data1,strcat(convex_label,'_Base_Coordination_Dist_Pop_',num2str(sim_number),'_',num2str(min(reliability)),'%.xlsx'))
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 243'))
     %end
 
     %if ~isempty(cell2mat(cell_table2))
     table_data2=cell2table(vertcat(cell_table_all_dist{:}))
-    writetable(table_data2,strcat(convex_label,'_All_Miti_Coordination_Dist_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'))
+    writetable(table_data2,strcat(convex_label,'_All_Miti_Coordination_Dist_',num2str(sim_number),'_',num2str(min(reliability)),'%.xlsx'))
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 249'))
     %end
     %pause(0.1)
@@ -341,7 +341,7 @@ if tf_rescrap_rev_data==1
     geos.Name=cell_coordination_kml(:,1);
     geos.Geometry='polygon';
     tic;
-    filename_kml=strcat(convex_label,'_Rev',num2str(sim_number),'_',num2str(reliability),'%.kml')
+    filename_kml=strcat(convex_label,'_Rev',num2str(sim_number),'_',num2str(min(reliability)),'%.kml')
     kmlwrite(filename_kml, geos, 'Name', geos.Name, 'Description',{},'EdgeColor','r','FaceColor','w','FaceAlpha',0.5,'LineWidth',3);
     toc;
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 262'))
@@ -372,12 +372,12 @@ disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 30
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %'Another stage of if we rescrap then we calculate, else load'
 
-filename_cell_poly_merge=strcat('cell_poly_merge_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(reliability),'%.mat');
-filename_cell_ind_poly=strcat('cell_ind_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(reliability),'%.mat');
-filename_cell_overlap_poly=strcat('cell_overlap_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(reliability),'%.mat');
-filename_cell_xor_poly=strcat('cell_xor_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(reliability),'%.mat');
-filename_cell_census_poly=strcat('cell_census_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(reliability),'%.mat');
-filename_cell_pea_hist_poly=strcat('cell_pea_hist_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(reliability),'%.mat');
+filename_cell_poly_merge=strcat('cell_poly_merge_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.mat');
+filename_cell_ind_poly=strcat('cell_ind_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.mat');
+filename_cell_overlap_poly=strcat('cell_overlap_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.mat');
+filename_cell_xor_poly=strcat('cell_xor_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.mat');
+filename_cell_census_poly=strcat('cell_census_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.mat');
+filename_cell_pea_hist_poly=strcat('cell_pea_hist_poly_',convex_label,'_',string_prop_model,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.mat');
 server_status_rev2(app,tf_server_status)
 
 disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 345'))
@@ -467,13 +467,13 @@ if tf_rescrap_rev_data==1
     tf_plot_overlap=1%0%1%0%1%0%1%0
     if tf_plot_overlap==1
         %plot_nationwide_single_overlap_rev1(app,sim_number,cell_poly_merge,cell_overlap_poly)
-        filename_overlay_plot=strcat('Overlay_Single_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.png')
+        filename_overlay_plot=strcat('Overlay_Single_',convex_label,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.png')
         plot_nationwide_single_overlap_rev2_filename(app,sim_number,cell_poly_merge,cell_overlap_poly,filename_overlay_plot)
 
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Just the single
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%coorindation zone
-        filename_single_plot=strcat('Single_Nationwide_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.png')
+        filename_single_plot=strcat('Single_Nationwide_',convex_label,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.png')
         tic;
         f1=figure;
         %AxesH = axes;
@@ -505,7 +505,7 @@ if tf_rescrap_rev_data==1
     tf_plot_nat=1%0%1%0
     if tf_plot_nat==1
         %%%%plot_nationwide_poly_miti_rev1(app,sim_number,cell_poly_merge,array_mitigation)
-        filename_nationwide_multi=strcat('Nationwide7_Multi_Rev_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.png')
+        filename_nationwide_multi=strcat('Nationwide7_Multi_Rev_',convex_label,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.png')
         plot_nationwide_poly_miti_rev2_filename(app,sim_number,cell_poly_merge,array_mitigation,filename_nationwide_multi)
     end
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 441'))
@@ -557,7 +557,7 @@ if tf_rescrap_rev_data==1
     tf_plot_nat_pea=1%0%1%0
     if tf_plot_nat_pea==1
         %%%%plot_pea_overlap_rev1(app,cell_poly_merge,cell_overlap_poly,cell_pea_hist_poly,array_mitigation)
-        filename_PEA_plot=strcat('PEA_Polygon_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.png')
+        filename_PEA_plot=strcat('PEA_Polygon_',convex_label,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.png')
         plot_pea_overlap_rev2_filename(app,cell_poly_merge,cell_overlap_poly,cell_pea_hist_poly,filename_PEA_plot)
     end
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 492'))
@@ -588,7 +588,7 @@ if tf_rescrap_rev_data==1
     retry_save=1;
     while(retry_save==1)
         try
-            writetable(table_pea,strcat('PEA_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'));
+            writetable(table_pea,strcat('PEA_',convex_label,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.xlsx'));
             pause(0.1)
             retry_save=0;
         catch
@@ -607,7 +607,7 @@ if tf_rescrap_rev_data==1
     retry_save=1;
     while(retry_save==1)
         try
-            writetable(table_pea,strcat('PEA_2Col_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'));
+            writetable(table_pea,strcat('PEA_2Col_',convex_label,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.xlsx'));
             pause(0.1)
             retry_save=0;
         catch
@@ -629,7 +629,7 @@ if tf_rescrap_rev_data==1
     retry_save=1;
     while(retry_save==1)
         try
-            writetable(table_pea,strcat('FREE_',convex_label,'_',num2str(sim_number),'_',num2str(reliability),'%.xlsx'));
+            writetable(table_pea,strcat('FREE_',convex_label,'_',num2str(sim_number),'_',num2str(min(reliability)),'%.xlsx'));
             pause(0.1)
             retry_save=0;
         catch

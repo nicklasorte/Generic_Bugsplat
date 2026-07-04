@@ -106,6 +106,9 @@ if tf_rescrap_rev_data==1
             %%%cell_bound_miti=cell(num_miti,10,num_per);
             cell_bound_miti(:,5,:)
 
+            cell_bound_miti
+            size(cell_bound_miti)
+
             [x1,y1,z1]=size(cell_bound_miti)
             if z1>1
                 keep_idx=NaN(1,1);
@@ -128,7 +131,10 @@ if tf_rescrap_rev_data==1
                 cell_miti_contour_pop=squeeze(cell_bound_miti);
             end
 
+            cell_bound_miti
             cell_miti_contour_pop=cell_miti_contour_pop(~cellfun('isempty',cell_miti_contour_pop(:,2)),:)
+
+
 
             %%%%'Updated the cell_miti in part3_neighborhood_miti_movelist_census2020_rev8
 
@@ -149,7 +155,17 @@ if tf_rescrap_rev_data==1
             if tf_convex==1
                 cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,3]);
             else
-                cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,6]);
+                tf_convex
+                temp_latlon=cell_miti_contour_pop{1,6};
+                [t1,t2]=size(temp_latlon)
+                if t1==1 && t2==1
+                    if isnan(temp_latlon)
+                        cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,3]);
+                    else
+                    end
+                else
+                    cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,6]);
+                end
             end
 
             cell_single_contour=cell(1,3);
@@ -211,10 +227,22 @@ if tf_rescrap_rev_data==1
             cell_coordination_kml{folder_idx,1}=sim_folder;
             if ~isempty(cell_miti_contour_pop)
                 if tf_convex==1
+                    tf_convex
                     temp_latlon=cell_miti_contour_pop{1,3};
                 else
+                    tf_convex
                     temp_latlon=cell_miti_contour_pop{1,6};
+                    [t1,t2]=size(temp_latlon)
+                    if t1==1 && t2==1
+                        if isnan(temp_latlon)
+                            temp_latlon=cell_miti_contour_pop{1,3};
+                        else
+                        end
+                    else
+                    end
+ 
                 end
+                temp_latlon
 
                 %%%%%Clockwise
                 [x_cw, y_cw] = poly2cw(temp_latlon(:,2),temp_latlon(:,1));
@@ -223,6 +251,21 @@ if tf_rescrap_rev_data==1
                 cell_coordination_kml{folder_idx,2}=temp_latlon(:,1);
                 cell_coordination_kml{folder_idx,3}=temp_latlon(:,2);
             end
+
+
+
+            % % % f1=figure;
+            % % % geoplot(temp_latlon(:,1),temp_latlon(:,2),'-r')
+            % % % grid on;
+            % % % legend
+            % % % pause(0.1)
+            % % % %%%%geobasemap landcover
+            % % % geobasemap streets-light%landcover
+            % % % f1.Position = [100 100 1200 900];
+            % % % pause(1)
+            % % % 
+            % % % 'need to check the cell_coordination_kml'
+            % % % pause;
 
         end
 
@@ -355,6 +398,7 @@ disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 30
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%sub_pop_geo_pea_ua2023_rev10(app,convex_label,string_prop_model,sim_number,reliability,cell_convex_zones,array_mitigation)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %'Another stage of if we rescrap then we calculate, else load'
 
@@ -387,6 +431,7 @@ disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 36
 if tf_rescrap_rev_data==1
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 363'))
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Polylmerge the cell_convex_zones for each mitigation level
+    cell_convex_zones
     [cell_poly_merge,cell_ind_poly,cell_overlap_poly,cell_xor_poly]=polymerge_multi_miti_rev1(app,cell_convex_zones,array_mitigation);
     disp_TextArea_PastText(app,strcat('scrap_data_excel_pop_geo_id_pea_rev6: Line 366'))
 
