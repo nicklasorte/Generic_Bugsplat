@@ -112,7 +112,7 @@ if tf_rescrap_rev_data==1
 
             cell_bound_miti
             %'We should have all the GEOid for the zones, just keep those, not in all, might need to calculate later, before the merge.'
-        
+
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Reduce the the single reliability
             %%%cell_bound_miti=cell(num_miti,10,num_per);
             cell_bound_miti(:,5,:)
@@ -134,7 +134,7 @@ if tf_rescrap_rev_data==1
                     end
                 end
                 if isnan(keep_idx)
-                     disp_TextArea_PastText(app,strcat('scrap_data_rev11: Line 134:',sim_folder))
+                    disp_TextArea_PastText(app,strcat('scrap_data_rev11: Line 134:',sim_folder))
                     'NaN Error on keep_idx'
                     pause;
                 end
@@ -146,152 +146,161 @@ if tf_rescrap_rev_data==1
             %cell_bound_miti
             cell_miti_contour_pop=cell_miti_contour_pop(~cellfun('isempty',cell_miti_contour_pop(:,2)),:)
 
-            %%%%%%%%Need to pull the 0dB for the right kml
-            if tf_zero_row==1
-                find_zero_idx=find(cell2mat(cell_miti_contour_pop(:,1))==0)
-                if ~isempty(find_zero_idx)
-                    cell_miti_contour_pop=cell_miti_contour_pop([find_zero_idx:end],:,:)
-                else
-                    [r1,c1]=size(cell_miti_contour_pop)
-                    if r1>1
-                         disp_TextArea_PastText(app,strcat('scrap_data_rev11: Line 154:',sim_folder))
-                        'need to check the size'
-                        pause;
-                    end
-                end
-            end
+            size(cell_miti_contour_pop)
+            if isempty(cell_miti_contour_pop)
+                'empty cell_miti_contour_pop'
+                %pause;
+            elseif ~isempty(cell_miti_contour_pop)
 
 
-            %%%%'Updated the cell_miti in part3_neighborhood_miti_movelist_census2020_rev8
 
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%
-            dual_cell=cell(2,2);
-            dual_cell{1,1}=sim_folder;
-            dual_cell{1,2}=cell2mat(cell_miti_contour_pop(:,[2])');
-            dual_cell{2,1}=sim_folder;
-            if tf_convex==1
-                dual_cell{2,2}=cell2mat(cell_miti_contour_pop(:,[8])');
-            else
-                dual_cell{2,2}=cell2mat(cell_miti_contour_pop(:,[10])');
-            end
-
-            cell_coordination_data{folder_idx,1}=dual_cell;
-            cell_convex_zones{folder_idx,1}=sim_folder;
-
-            if tf_convex==1
-                cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,3]);
-            else
-                tf_convex
-                temp_latlon=cell_miti_contour_pop{1,6};
-                [t1,t2]=size(temp_latlon)
-                if t1==1 && t2==1
-                    if isnan(temp_latlon)
-                        cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,3]);
+                %%%%%%%%Need to pull the 0dB for the right kml
+                if tf_zero_row==1
+                    find_zero_idx=find(cell2mat(cell_miti_contour_pop(:,1))==0)
+                    if ~isempty(find_zero_idx)
+                        cell_miti_contour_pop=cell_miti_contour_pop([find_zero_idx:end],:,:)
                     else
+                        [r1,c1]=size(cell_miti_contour_pop)
+                        if r1>1
+                            disp_TextArea_PastText(app,strcat('scrap_data_rev11: Line 154:',sim_folder))
+                            'need to check the size'
+                            pause;
+                        end
                     end
-                else
-                    cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,6]);
                 end
-            end
 
-            cell_single_contour=cell(1,3);
-            cell_single_contour{1,1}=sim_folder;
-            if ~isempty(cell_miti_contour_pop)
-                cell_single_contour{1,2}=cell2mat(cell_miti_contour_pop(1,[2])');
+
+                %%%%'Updated the cell_miti in part3_neighborhood_miti_movelist_census2020_rev8
+
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%
+                dual_cell=cell(2,2);
+                dual_cell{1,1}=sim_folder;
+                dual_cell{1,2}=cell2mat(cell_miti_contour_pop(:,[2])');
+                dual_cell{2,1}=sim_folder;
                 if tf_convex==1
-                    cell_single_contour{1,3}=cell2mat(cell_miti_contour_pop(1,[8])');
+                    dual_cell{2,2}=cell2mat(cell_miti_contour_pop(:,[8])');
                 else
-                    cell_single_contour{1,3}=cell2mat(cell_miti_contour_pop(1,[10])');
+                    dual_cell{2,2}=cell2mat(cell_miti_contour_pop(:,[10])');
                 end
-            end
-            cell_table_0dB_dist_pop{folder_idx,1}=cell_single_contour;
 
-            %%%%%%%%%All Miti Distance
-            cell_multi_contour=cell(1,2);
-            cell_multi_contour{1,1}=sim_folder;
-            cell_multi_contour{1,2}=cell2mat(cell_miti_contour_pop(:,[2])');
-            cell_table_all_dist{folder_idx,1}=cell_multi_contour;
+                cell_coordination_data{folder_idx,1}=dual_cell;
+                cell_convex_zones{folder_idx,1}=sim_folder;
 
-            %%%%%%%%%All Miti Population
-            cell_table_all_pop{folder_idx,1}=sim_folder;
-            if tf_convex==1
-                cell_table_all_pop{folder_idx,2}=cell2mat(cell_miti_contour_pop(:,[8])');
-            else
-                cell_table_all_pop{folder_idx,2}=cell2mat(cell_miti_contour_pop(:,[10])');
-            end
-
-
-            %%%%%%%%%%Gather the GEO Id
-            cell_geo_id{folder_idx,1}=sim_folder;
-            if tf_convex==1
-                cell_geo_id{folder_idx,2}=cell_miti_contour_pop{1,7};
-            else
-                cell_geo_id{folder_idx,2}=cell_miti_contour_pop{1,9};
-            end
-
-            %%%%1)Mitigation,
-            % %%2) Max knn dist,
-            % %%3)Convex Bound,
-            % %%4)Max Interference dB,
-            % %%%5)Prop Reliability
-            %%%%%6)Radial Bound
-            %%%%%7) GeoId,
-            % %%%8) Total Pop
-
-
-            %%%%1)Mitigation,
-            % %%2) Max knn dist,
-            % %%3)Convex Bound,
-            % %%4)Max Interference dB,
-            % %%%5)Prop Reliability
-            %%%%%6)Radial Bound
-            %%%%%7)Convex GeoId,
-            %%%%%8)Convex Total Pop
-            %%%%%9)Concave GeoId,
-            %%%%%10)Concave Total Pop
-
-            cell_coordination_kml{folder_idx,1}=sim_folder;
-            if ~isempty(cell_miti_contour_pop)
                 if tf_convex==1
-                    %tf_convex
-                    temp_latlon=cell_miti_contour_pop{1,3};
+                    cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,3]);
                 else
-                    %tf_convex
+                    tf_convex
                     temp_latlon=cell_miti_contour_pop{1,6};
-                    [t1,t2]=size(temp_latlon);
+                    [t1,t2]=size(temp_latlon)
                     if t1==1 && t2==1
                         if isnan(temp_latlon)
-                            temp_latlon=cell_miti_contour_pop{1,3};
+                            cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,3]);
                         else
                         end
                     else
+                        cell_convex_zones{folder_idx,2}=cell_miti_contour_pop(:,[1,6]);
                     end
- 
                 end
-                %temp_latlon
 
-                %%%%%Clockwise
-                [x_cw, y_cw] = poly2cw(temp_latlon(:,2),temp_latlon(:,1));
-                temp_latlon=horzcat(y_cw,x_cw);
+                cell_single_contour=cell(1,3);
+                cell_single_contour{1,1}=sim_folder;
+                if ~isempty(cell_miti_contour_pop)
+                    cell_single_contour{1,2}=cell2mat(cell_miti_contour_pop(1,[2])');
+                    if tf_convex==1
+                        cell_single_contour{1,3}=cell2mat(cell_miti_contour_pop(1,[8])');
+                    else
+                        cell_single_contour{1,3}=cell2mat(cell_miti_contour_pop(1,[10])');
+                    end
+                end
+                cell_table_0dB_dist_pop{folder_idx,1}=cell_single_contour;
 
-                cell_coordination_kml{folder_idx,2}=temp_latlon(:,1);
-                cell_coordination_kml{folder_idx,3}=temp_latlon(:,2);
+                %%%%%%%%%All Miti Distance
+                cell_multi_contour=cell(1,2);
+                cell_multi_contour{1,1}=sim_folder;
+                cell_multi_contour{1,2}=cell2mat(cell_miti_contour_pop(:,[2])');
+                cell_table_all_dist{folder_idx,1}=cell_multi_contour;
+
+                %%%%%%%%%All Miti Population
+                cell_table_all_pop{folder_idx,1}=sim_folder;
+                if tf_convex==1
+                    cell_table_all_pop{folder_idx,2}=cell2mat(cell_miti_contour_pop(:,[8])');
+                else
+                    cell_table_all_pop{folder_idx,2}=cell2mat(cell_miti_contour_pop(:,[10])');
+                end
+
+
+                %%%%%%%%%%Gather the GEO Id
+                cell_geo_id{folder_idx,1}=sim_folder;
+                if tf_convex==1
+                    cell_geo_id{folder_idx,2}=cell_miti_contour_pop{1,7};
+                else
+                    cell_geo_id{folder_idx,2}=cell_miti_contour_pop{1,9};
+                end
+
+                %%%%1)Mitigation,
+                % %%2) Max knn dist,
+                % %%3)Convex Bound,
+                % %%4)Max Interference dB,
+                % %%%5)Prop Reliability
+                %%%%%6)Radial Bound
+                %%%%%7) GeoId,
+                % %%%8) Total Pop
+
+
+                %%%%1)Mitigation,
+                % %%2) Max knn dist,
+                % %%3)Convex Bound,
+                % %%4)Max Interference dB,
+                % %%%5)Prop Reliability
+                %%%%%6)Radial Bound
+                %%%%%7)Convex GeoId,
+                %%%%%8)Convex Total Pop
+                %%%%%9)Concave GeoId,
+                %%%%%10)Concave Total Pop
+
+                cell_coordination_kml{folder_idx,1}=sim_folder;
+                if ~isempty(cell_miti_contour_pop)
+                    if tf_convex==1
+                        %tf_convex
+                        temp_latlon=cell_miti_contour_pop{1,3};
+                    else
+                        %tf_convex
+                        temp_latlon=cell_miti_contour_pop{1,6};
+                        [t1,t2]=size(temp_latlon);
+                        if t1==1 && t2==1
+                            if isnan(temp_latlon)
+                                temp_latlon=cell_miti_contour_pop{1,3};
+                            else
+                            end
+                        else
+                        end
+
+                    end
+                    %temp_latlon
+
+                    %%%%%Clockwise
+                    [x_cw, y_cw] = poly2cw(temp_latlon(:,2),temp_latlon(:,1));
+                    temp_latlon=horzcat(y_cw,x_cw);
+
+                    cell_coordination_kml{folder_idx,2}=temp_latlon(:,1);
+                    cell_coordination_kml{folder_idx,3}=temp_latlon(:,2);
+                end
+
+
+
+                % % f1=figure;
+                % % geoplot(temp_latlon(:,1),temp_latlon(:,2),'-r')
+                % % grid on;
+                % % legend
+                % % pause(0.1)
+                % % %%%%geobasemap landcover
+                % % geobasemap streets-light%landcover
+                % % f1.Position = [100 100 1200 900];
+                % % pause(1)
+                % %
+                % % 'need to check the cell_coordination_kml'
+                % % pause;
             end
-
-
-
-            % % f1=figure;
-            % % geoplot(temp_latlon(:,1),temp_latlon(:,2),'-r')
-            % % grid on;
-            % % legend
-            % % pause(0.1)
-            % % %%%%geobasemap landcover
-            % % geobasemap streets-light%landcover
-            % % f1.Position = [100 100 1200 900];
-            % % pause(1)
-            % % 
-            % % 'need to check the cell_coordination_kml'
-            % % pause;
 
         end
 
@@ -326,7 +335,7 @@ if tf_rescrap_rev_data==1
     % 'post convet'
     % cell_convex_zones
     % cell_convex_zones{:,2}
-    % 
+    %
     %     'check'
     % pause;
 
@@ -618,7 +627,7 @@ if tf_rescrap_rev_data==1
 
     %%%%%%%%'find the urban area impact similar to the pea impact'
     [cell_ua_hist_poly]=urban_area_impact_overlap_xor_2020_rev2(app,array_mitigation,cell_census_poly);
-       retry_save=1;
+    retry_save=1;
     while(retry_save==1)
         try
             save(filename_cell_ua_hist_poly,'cell_ua_hist_poly')
@@ -756,7 +765,7 @@ if tf_rescrap_rev_data==1
         end
     end
 
-    
+
 
     array_pop_pea_data=cell2mat(temp_cell_pea_hist_poly(:,[1,2,3]));
     covered_pop=sum(sum(array_pop_pea_data(:,[1,2])))

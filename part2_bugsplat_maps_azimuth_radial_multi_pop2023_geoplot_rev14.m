@@ -2,6 +2,7 @@ function part2_bugsplat_maps_azimuth_radial_multi_pop2023_geoplot_rev14(app,rev_
 
 
 [sim_number,folder_names,~]=check_rev_folders(app,rev_folder);
+disp_TextArea_PastText(app,strcat('part2: Line 5'))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Function:
 cell_status_filename=strcat('cell_',string_prop_model,'_',num2str(sim_number),'_contour_pop_status.mat')
@@ -32,7 +33,7 @@ if tf_recalculate==1
 end
 zero_idx=find(cell2mat(cell_status(:,2))==0);
 cell_status
-
+disp_TextArea_PastText(app,strcat('part2: Line 36'))
 if ~isempty(zero_idx)==1
     temp_folder_names=folder_names(zero_idx)
     num_folders=length(temp_folder_names)
@@ -65,6 +66,7 @@ if ~isempty(zero_idx)==1
         end
     end
 
+    disp_TextArea_PastText(app,strcat('part2: Line 69'))
     %%%%%%%%%2010
     % % mid_lat=new_full_census_2010(:,2);
     % % mid_lon=new_full_census_2010(:,3);
@@ -84,6 +86,7 @@ if ~isempty(zero_idx)==1
     [multi_hWaitbar,multi_hWaitbarMsgQueue]= ParForWaitbarCreateMH_time('Multi-Folder Mapping: ',num_folders);    %%%%%%% Create ParFor Waitbar
 
     for folder_idx=1:1:num_folders
+        disp_TextArea_PastText(app,strcat('part2: Line 89'))
         num_folders-folder_idx
         disp_TextArea_PastText(app,strcat('Part2 Maps:',num2str(num_folders-folder_idx)))
 
@@ -154,7 +157,7 @@ if ~isempty(zero_idx)==1
                 [~]=checkout_cell_status_rev1(app,checkout_filename,cell_status_filename,sim_folder,folder_names,tf_update_cell_status);
                 toc;
             else
-
+                disp_TextArea_PastText(app,strcat('part2: Line 160'))
 
                 %%%%%Persistent Load the other variables
                 disp_progress(app,strcat('Mapping: Loading Sim Data  . . .'))
@@ -201,6 +204,7 @@ if ~isempty(zero_idx)==1
                         % % %      %%%%array_list_bs  %%%%%%%1) Lat, 2)Lon, 3)BS height, 4)BS EIRP 5) Nick Unique ID for each sector, 6)NLCD: R==1/S==2/U==3, 7) Azimuth 8)BS EIRP Mitigation
 
                         if tf_calc_rx_angle==1 %%%%%%%Only need to load if we are doing the angles
+                            'Just do this in part0'
                             'pause at tf_calc_rx_angle'
                             pause;
                             %%%load(strcat(data_label1,'_array_ant_gain_vertical.mat'),'array_ant_gain_vertical')
@@ -225,11 +229,13 @@ if ~isempty(zero_idx)==1
 
 
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                 [base_buffer]=base_buffer_azi_multi_rev4(app,wider_keyhole,data_label1,base_protection_pts);
+                disp_TextArea_PastText(app,strcat('part2: Line 232'))
+                [base_buffer]=base_buffer_azi_multi_rev4(app,wider_keyhole,data_label1,base_protection_pts);
 
                 %%%%%%Load all the ITM pathloss data and TIREM angles
 
                 %%%%%%Load all the pathloss data
+                disp_TextArea_PastText(app,strcat('part2: Line 238'))
                 tic;
                 [array_full_pl_data,full_prop_mode_data]=load_full_pathloss_info_multi_rel_rev3(app,data_label1,string_prop_model,grid_spacing,tf_rescrap_pathloss,base_protection_pts,sim_array_list_bs,sim_number,tf_tropo_cut,reliability);
                 toc;
@@ -270,6 +276,7 @@ if ~isempty(zero_idx)==1
                 max(min_prop_data)
 
 
+                disp_TextArea_PastText(app,strcat('part2: Line 279'))
                 num_rel_check=length(array_reliability_check)
                 num_rels=length(reliability)
                 if num_rel_check==1 && num_pp_pts==1
@@ -283,7 +290,9 @@ if ~isempty(zero_idx)==1
                     pause;
                 end
 
+
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Pathloss Heat Map for each Reliability
+                disp_TextArea_PastText(app,strcat('part2: Line 295'))
                 plot_pathloss_heatmat_reli_geoplot_rev3(app,array_reliability_check,min_pl_data,data_label1,string_prop_model,grid_spacing,sim_array_list_bs,base_protection_pts)
                 plot_prop_mechanism_heatmap_geoplot_rev2(app,data_label1,string_prop_model,grid_spacing,sim_array_list_bs,min_prop_data,base_protection_pts)
 
@@ -297,7 +306,7 @@ if ~isempty(zero_idx)==1
                     pause;
                     cell_bound_miti=cell(num_miti,10,num_rels);
                 end
-                
+                disp_TextArea_PastText(app,strcat('part2: Line 309'))
                 cell_bound_miti=cell(num_miti,10,num_rels);
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Old
                 %%%%1)Mitigation,
@@ -368,18 +377,23 @@ if ~isempty(zero_idx)==1
                     plot_multi_zones_reli_geoplot_rev4(app,temp_zones,base_protection_pts,data_label1,string_prop_model,temp_rel,grid_spacing)
                     plot_multi_radial_zones_reli_geoplot_rev5(app,temp_zones,base_protection_pts,data_label1,string_prop_model,temp_rel,grid_spacing)
                 end
+                disp_TextArea_PastText(app,strcat('part2: Line 380'))
 
                 if num_rels==1
                     %%%%%%%%Map it
                     cell_bound_miti=squeeze(cell_bound_miti)
                     size(cell_bound_miti)
                     cell_multi_con=cell_bound_miti(:,[1,3])
-                    filename_bugsplat=strcat('Convex_Multi_Bound_Contours_',sim_folder,'.png');
-                    title_str=strcat('Convex Multi-Contours:',sim_folder);
-                    map_multi_contours_rev1(app,cell_multi_con,title_str,filename_bugsplat)
+                    temp_pts=vertcat(cell_multi_con{1,2})
+                    if ~isempty(temp_pts)
+                        filename_bugsplat=strcat('Convex_Multi_Bound_Contours_',sim_folder,'.png');
+                        title_str=strcat('Convex Multi-Contours:',sim_folder);
+                        map_multi_contours_rev1(app,cell_multi_con,title_str,filename_bugsplat)
+                    end
                 end
          
 
+                disp_TextArea_PastText(app,strcat('part2: Line 396(95)'))
                 %%%%%%%%%%Save
                 retry_save=1;
                 while(retry_save==1)
@@ -392,6 +406,7 @@ if ~isempty(zero_idx)==1
                         pause(0.1)
                     end
                 end
+                disp_TextArea_PastText(app,strcat('part2: Line 409'))
 
 
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%New
@@ -409,51 +424,55 @@ if ~isempty(zero_idx)==1
                 %%%%%%%%Take the maximum radial_bound and compare it to the
                 %%%%%%%%wider_keyhole/base_buffer
                 larger_radial_bound=cell_bound_miti{1,6,1};
-                radial_poly=polyshape(larger_radial_bound(:,2),larger_radial_bound(:,1));
-                radial_geopoly=geopolyshape(larger_radial_bound(:,1),larger_radial_bound(:,2));
+                larger_radial_bound
+                if ~isempty(larger_radial_bound)
+                    radial_poly=polyshape(larger_radial_bound(:,2),larger_radial_bound(:,1));
+                    radial_geopoly=geopolyshape(larger_radial_bound(:,1),larger_radial_bound(:,2));
 
+                    %%%%%%%%%%%%%Take the 90th Percentile of it
+                    check_keyhole=wider_keyhole;
+                    check_keyhole(:,3)=wider_keyhole(:,3)*0.9;
 
-                %%%%%%%%%%%%%Take the 90th Percentile of it
-                check_keyhole=wider_keyhole;
-                check_keyhole(:,3)=wider_keyhole(:,3)*0.9;
-
-                [check_buffer]=geo_buffer_azi_rev1(app,base_protection_pts,check_keyhole);
-                check_poly=polyshape(check_buffer(:,2),check_buffer(:,1));
-                check_geopoly=geopolyshape(check_buffer(:,1),check_buffer(:,2));
-                outlier_poly = subtract(radial_poly,check_poly);
-                if ~isempty(outlier_poly)
-                    vertices=outlier_poly.Vertices;
-                    x_coords = vertices(:, 1); % x-coordinates
-                    y_coords = vertices(:, 2); % y-coordinates
-                    outlier_geopoly=geopolyshape(y_coords,x_coords);
-                    %%%%%%%%%Then that means me have a overflow
-                    f2 = figure;
-                    geoplot(radial_geopoly)
-                    hold on;
-                    geoplot(check_geopoly)
-                    geoplot(outlier_geopoly,'LineWidth',3)
-                    geoplot(base_buffer(:,1),base_buffer(:,2),'-k')
-                    geoplot(larger_radial_bound(:,1),larger_radial_bound(:,2),'-r')
-                    grid on;
-                    geobasemap streets-light%landcover
-                    %f2.Position = [100 100 1200 900];
-                    %pause(1)
-                    filename1=strcat('Insufficient_Buffer_',data_label1,'_',string_prop_model,'.png');
-                    retry_save=1;
-                    while(retry_save==1)
-                        try
-                            saveas(gcf,char(filename1))
-                            pause(0.1);
-                            retry_save=0;
-                        catch
-                            retry_save=1;
-                            pause(0.1)
+                    disp_TextArea_PastText(app,strcat('part2: Line 435'))
+                    [check_buffer]=geo_buffer_azi_rev1(app,base_protection_pts,check_keyhole);
+                    check_poly=polyshape(check_buffer(:,2),check_buffer(:,1));
+                    check_geopoly=geopolyshape(check_buffer(:,1),check_buffer(:,2));
+                    outlier_poly = subtract(radial_poly,check_poly);
+                    if ~isempty(outlier_poly)
+                        vertices=outlier_poly.Vertices;
+                        x_coords = vertices(:, 1); % x-coordinates
+                        y_coords = vertices(:, 2); % y-coordinates
+                        outlier_geopoly=geopolyshape(y_coords,x_coords);
+                        %%%%%%%%%Then that means me have a overflow
+                        f2 = figure;
+                        geoplot(radial_geopoly)
+                        hold on;
+                        geoplot(check_geopoly)
+                        geoplot(outlier_geopoly,'LineWidth',3)
+                        geoplot(base_buffer(:,1),base_buffer(:,2),'-k')
+                        geoplot(larger_radial_bound(:,1),larger_radial_bound(:,2),'-r')
+                        grid on;
+                        geobasemap streets-light%landcover
+                        %f2.Position = [100 100 1200 900];
+                        %pause(1)
+                        filename1=strcat('Insufficient_Buffer_',data_label1,'_',string_prop_model,'.png');
+                        retry_save=1;
+                        while(retry_save==1)
+                            try
+                                saveas(gcf,char(filename1))
+                                pause(0.1);
+                                retry_save=0;
+                            catch
+                                retry_save=1;
+                                pause(0.1)
+                            end
                         end
+
+                        pause(0.1);
+                        close(f2)
                     end
-                   
-                    pause(0.1);
-                    close(f2)
                 end
+                disp_TextArea_PastText(app,strcat('part2: Line 473'))
 
 
     
@@ -472,6 +491,7 @@ if ~isempty(zero_idx)==1
                         pause(0.1)
                     end
                 end
+                disp_TextArea_PastText(app,strcat('part2: Line 492'))
 
                 retry_cd=1;
                 while(retry_cd==1)
@@ -484,6 +504,7 @@ if ~isempty(zero_idx)==1
                         pause(0.1)
                     end
                 end
+                disp_TextArea_PastText(app,strcat('part2: Line 505'))
                 %[~]=update_generic_status_cell_rev1(app,folder_names,sim_folder,cell_status_filename);
                  %%%%%%%%Update the cell_status
                 tf_update_cell_status=1;
@@ -492,14 +513,20 @@ if ~isempty(zero_idx)==1
                 toc;
                 %%%server_status_rev1(app)
                 server_status_rev2(app,tf_server_status)
+                disp_TextArea_PastText(app,strcat('part2: Line 514'))
             end
+            disp_TextArea_PastText(app,strcat('part2: Line 516'))
         end
         multi_hWaitbarMsgQueue.send(0);
+        disp_TextArea_PastText(app,strcat('part2: Line 519'))
     end
+    disp_TextArea_PastText(app,strcat('part2: Line 521'))
     delete(multi_hWaitbarMsgQueue);
     close(multi_hWaitbar);
     finish_cell_status_rev1(app,rev_folder,cell_status_filename)
+    disp_TextArea_PastText(app,strcat('part2: Line 525'))
 end
 server_status_rev2(app,tf_server_status)
+disp_TextArea_PastText(app,strcat('part2: Line 528'))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%End of Part 2
