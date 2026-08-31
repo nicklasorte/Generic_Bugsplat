@@ -12,7 +12,13 @@ dist_bet_pts=NaN(len-1,1);
 for k0 = 1:len-1
    dist_bet_pts(k0) = distance_app(app,p(k0,:),p(k0+1,:));
 end
-totaldist = nansum(dist_bet_pts);
+% totaldist = nansum(dist_bet_pts);
+% check version, use nansum for 2022 and earlier and sum w/omitnan option for 2023 and later
+if double(regexp(string(version('-release')), '^[0-9]+', 'match')) >= 2023
+	totaldist = sum(dist_bet_pts, "omitnan");
+else	
+	totaldist = nansum(dist_bet_pts);
+end
 
 %% interval %%
 intv = totaldist./(N-1);

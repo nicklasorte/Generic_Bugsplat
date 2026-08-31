@@ -29,7 +29,13 @@ else
         for j=1:1:x10-1
             dist_steps(j)=deg2km(distance(border_dpa_bound(j,1),border_dpa_bound(j,2),border_dpa_bound(j+1,1),border_dpa_bound(j+1,2)));
         end
-        seg_dist=nansum(dist_steps);
+        % seg_dist=nansum(dist_steps);
+        % check version, use nansum for 2022 and earlier and sum w/omitnan option for 2023 and later
+        if double(regexp(string(version('-release')), '^[0-9]+', 'match')) >= 2023
+	        seg_dist=sum(dist_steps, "omitnan");
+        else	
+	        seg_dist=nansum(dist_steps);
+        end
         line_steps=ceil(seg_dist/(step_size))+1;
         dpa_edge_pt=curvspace_app(app,border_dpa_bound,line_steps);
         
